@@ -51,4 +51,22 @@ RSpec.describe FieldOptions do
       end
     end
   end
+
+  describe '#dup' do
+    subject { FieldOptions.new(mode: :random, view: 'random view object') }
+
+    let(:dup) { subject.dup }
+
+    it 'returns a different instance' do
+      expect(dup.object_id).to_not eq subject.object_id
+    end
+
+    it 'does not duplicate the view context' do
+      expect(dup.view.object_id).to eq subject.view.object_id
+    end
+
+    it 'copies the mode' do
+      expect(dup.mode).to eq :random
+    end
+  end
 end

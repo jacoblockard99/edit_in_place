@@ -23,7 +23,9 @@ module EditInPlace
 
     # @overload initialize(options)
     #   Creates a new instance of {FieldOptions} with the given options.
-    #   @param options [Hash, #[]] A hash containing the given field options.
+    #   @param options [Hash, #[]] a hash containing the given field options.
+    #   @option options [Symbol] :mode the {#mode} in which fields should be rendered.
+    #   @option options :view the {#view} context to use when rendering the field.
     # @overload initialize
     #   Creates a new instance of {FieldOptions} with the default options.
     def initialize(options = {})
@@ -33,6 +35,18 @@ module EditInPlace
 
     def mode=(mode)
       @mode = mode.nil? ? nil : mode.to_sym
+    end
+
+    # Creates a deep copy of this {FieldOptions} instance that can be safely modified.
+    # @return [FieldOptions] a deep copy of this {FieldOptions} instance.
+    # @note The current implementation of {#dup} does nothing different than the default
+    #   implementation. More fields that need to be duplicated will likely be added in the
+    #   future, however.
+    def dup
+      f = FieldOptions.new
+      f.mode = mode
+      f.view = view
+      f
     end
   end
 end
