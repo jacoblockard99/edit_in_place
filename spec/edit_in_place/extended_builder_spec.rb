@@ -1,6 +1,6 @@
 require 'rails_helper'
-require 'test_extended_builder'
-require 'another_extended_builder'
+require 'support/test_extended_builder'
+require 'support/another_extended_builder'
 
 include EditInPlace
 

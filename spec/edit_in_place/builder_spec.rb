@@ -1,6 +1,6 @@
 require 'rails_helper'
-require 'test_field_type'
-require 'complex_test_field_type'
+require 'support/test_field_type'
+require 'support/complex_test_field_type'
 
 include EditInPlace
 

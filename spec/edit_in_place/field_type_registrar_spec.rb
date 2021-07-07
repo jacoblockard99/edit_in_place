@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'test_field_type'
+require 'support/test_field_type'
 
 include EditInPlace
 
