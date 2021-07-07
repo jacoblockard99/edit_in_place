@@ -109,4 +109,24 @@ RSpec.describe FieldOptions do
       end
     end
   end
+
+  describe '#merge' do
+    subject { FieldOptions.new(mode: :old, view: 'old view') }
+    let(:other) { FieldOptions.new(mode: :new, view: 'new view') }
+    let(:merged) { subject.merge(other) }
+
+    it 'merges all fields' do
+      expect(merged.mode).to eq :new
+      expect(merged.view).to eq 'new view'
+    end
+
+    it 'returns a new instance' do
+      expect(merged.object_id).to_not eq subject.object_id
+    end
+
+    it 'does not change the original instance' do
+      expect(subject.mode).to eq :old
+      expect(subject.view).to eq 'old view'
+    end
+  end
 end

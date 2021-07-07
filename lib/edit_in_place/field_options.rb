@@ -50,12 +50,27 @@ module EditInPlace
     end
 
     # Merges the given {FieldOptions} instance into this one. Modes and view contexts from the
-    # other instance will overwrite those in this instance if present.
+    # other instance will overwrite those in this instance if present. The other instance is
+    # duplicated before being merged, so it can be safely modified after the fact.
     # @param other [FieldOptions] the other field options to merge into this one.
     # @return [void]
     def merge!(other)
+      other = other.dup
+
       self.mode = other.mode unless other.mode.nil?
       self.view = other.view unless other.view.nil?
+    end
+
+    # Creates a _new_ {FieldOptions} instance that is the result of merging the given
+    # {FieldOptions} instance into this one. Neither instance is modified, and both are
+    # duplicated, meaning that they can be safely modified after the fact. Merging occurs exactly
+    # as with {#merge!}.
+    # @param other [FieldOptions] the other field options to merge into this one.
+    # @return [FieldOptions] the result of merging the two instances.
+    def merge(other)
+      new = dup
+      new.merge!(other)
+      new
     end
   end
 end
