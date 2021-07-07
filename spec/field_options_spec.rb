@@ -69,4 +69,44 @@ RSpec.describe FieldOptions do
       expect(dup.mode).to eq :random
     end
   end
+
+  describe '#merge!' do
+    before { subject.merge!(other) }
+
+    context 'when both instances contain a view context' do
+      subject { FieldOptions.new(view: 'old view') }
+      let(:other) { FieldOptions.new(view: 'new view') }
+
+      it 'overwrites this instance' do
+        expect(subject.view).to eq 'new view'
+      end
+    end
+
+    context 'when the other instance does not contain a view context' do
+      subject { FieldOptions.new(view: 'old view') }
+      let(:other) { FieldOptions.new }
+
+      it 'keeps the old view' do
+        expect(subject.view).to eq 'old view'
+      end
+    end
+
+    context 'when both instances contain a mode' do
+      subject { FieldOptions.new(mode: :old) }
+      let(:other) { FieldOptions.new(mode: :new) }
+
+      it 'overwrites this instance' do
+        expect(subject.mode).to eq :new
+      end
+    end
+
+    context 'when the other instance does not contain a mode' do
+      subject { FieldOptions.new(mode: :old) }
+      let(:other) { FieldOptions.new }
+
+      it 'keeps the old mode' do
+        expect(subject.mode).to eq :old
+      end
+    end
+  end
 end

@@ -48,5 +48,14 @@ module EditInPlace
       f.view = view
       f
     end
+
+    # Merges the given {FieldOptions} instance into this one. Modes and view contexts from the
+    # other instance will overwrite those in this instance if present.
+    # @param other [FieldOptions] the other field options to merge into this one.
+    # @return [void]
+    def merge!(other)
+      self.mode = other.mode unless other.mode.nil?
+      self.view = other.view unless other.view.nil?
+    end
   end
 end
