@@ -22,29 +22,29 @@ RSpec.describe Configuration do
   describe '#dup' do
     before do
       subject.field_types.register_all({
-        text: TestFieldType.new('text field'),
-        image: TestFieldType.new('image field'),
-        bool: TestFieldType.new('bool field')
-      })
+                                         text: TestFieldType.new('text field'),
+                                         image: TestFieldType.new('image field'),
+                                         bool: TestFieldType.new('bool field')
+                                       })
     end
 
     let(:dup) { subject.dup }
 
     it 'returns a different instance' do
-      expect(dup.object_id).to_not eq subject.object_id
+      expect(dup.object_id).not_to eq subject.object_id
     end
 
     it 'duplicates the FieldTypeRegistrar' do
-      expect(dup.field_types.object_id).to_not eq subject.field_types.object_id
+      expect(dup.field_types.object_id).not_to eq subject.field_types.object_id
     end
 
     it 'duplicates the FieldOptions' do
-      expect(dup.field_options.object_id).to_not eq subject.field_options.object_id
+      expect(dup.field_options.object_id).not_to eq subject.field_options.object_id
     end
 
     it 'performs a deep copy of the FieldTypeRegistrar' do
       actual = dup.field_types.find(:text).object_id
-      expect(actual).to_not eq subject.field_types.find(:text).object_id
+      expect(actual).not_to eq subject.field_types.find(:text).object_id
     end
 
     it 'can be safely modified' do

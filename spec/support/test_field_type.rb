@@ -11,12 +11,11 @@ class TestFieldType < EditInPlace::FieldType
 
   protected
 
-  def render_viewing(options, *args)
+  def render_viewing(_options, *args)
     "Init: #{arg}, After: #{args.first}"
   end
 
-  def render_editing(options, *args)
+  def render_editing(_options, *args)
     "EDITING: Init: #{arg}, After: #{args.first}"
   end
 end
-

@@ -1,11 +1,11 @@
-require "edit_in_place/version"
-require "edit_in_place/railtie"
-require "edit_in_place/builder"
-require "edit_in_place/configuration"
-require "edit_in_place/extended_builder"
-require "edit_in_place/field_options"
-require "edit_in_place/field_type"
-require "edit_in_place/field_type_registrar"
+require 'edit_in_place/version'
+require 'edit_in_place/railtie'
+require 'edit_in_place/builder'
+require 'edit_in_place/configuration'
+require 'edit_in_place/extended_builder'
+require 'edit_in_place/field_options'
+require 'edit_in_place/field_type'
+require 'edit_in_place/field_type_registrar'
 
 # Namespace for the 'edit_in_place' Rails gemified plugin.
 #
@@ -31,7 +31,7 @@ module EditInPlace
   # @yieldparam config [Configuration] The {Configuration} instance of the edit_in_place plugin.
   # @yieldreturn [void]
   # @return [void]
-  def self.configure(&block)
+  def self.configure
     yield config if block_given?
   end
 end

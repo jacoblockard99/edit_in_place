@@ -29,7 +29,7 @@ module EditInPlace
     # @return [Array<Symbol>] the modes supported by this field type.
     # @note Subclasses should override this method as appropriate.
     def supported_modes
-      [:viewing, :editing]
+      %i[viewing editing]
     end
 
     # Creates a deep copy of this {FieldType} that can be safely modified.
@@ -46,9 +46,7 @@ module EditInPlace
     # @param mode [Symbol] the mode to validate.
     # @return [void]
     def validate_mode!(mode)
-      unless supported_modes.include? mode
-        raise "The mode '#{mode}' is not supported by this field type!"
-      end
+      raise "The mode '#{mode}' is not supported by this field type!" unless supported_modes.include? mode
     end
   end
 end

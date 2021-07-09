@@ -58,7 +58,7 @@ RSpec.describe FieldOptions do
     let(:dup) { subject.dup }
 
     it 'returns a different instance' do
-      expect(dup.object_id).to_not eq subject.object_id
+      expect(dup.object_id).not_to eq subject.object_id
     end
 
     it 'does not duplicate the view context' do
@@ -75,6 +75,7 @@ RSpec.describe FieldOptions do
 
     context 'when both instances contain a view context' do
       subject { FieldOptions.new(view: 'old view') }
+
       let(:other) { FieldOptions.new(view: 'new view') }
 
       it 'overwrites this instance' do
@@ -84,6 +85,7 @@ RSpec.describe FieldOptions do
 
     context 'when the other instance does not contain a view context' do
       subject { FieldOptions.new(view: 'old view') }
+
       let(:other) { FieldOptions.new }
 
       it 'keeps the old view' do
@@ -93,6 +95,7 @@ RSpec.describe FieldOptions do
 
     context 'when both instances contain a mode' do
       subject { FieldOptions.new(mode: :old) }
+
       let(:other) { FieldOptions.new(mode: :new) }
 
       it 'overwrites this instance' do
@@ -102,6 +105,7 @@ RSpec.describe FieldOptions do
 
     context 'when the other instance does not contain a mode' do
       subject { FieldOptions.new(mode: :old) }
+
       let(:other) { FieldOptions.new }
 
       it 'keeps the old mode' do
@@ -112,6 +116,7 @@ RSpec.describe FieldOptions do
 
   describe '#merge' do
     subject { FieldOptions.new(mode: :old, view: 'old view') }
+
     let(:other) { FieldOptions.new(mode: :new, view: 'new view') }
     let(:merged) { subject.merge(other) }
 
@@ -121,7 +126,7 @@ RSpec.describe FieldOptions do
     end
 
     it 'returns a new instance' do
-      expect(merged.object_id).to_not eq subject.object_id
+      expect(merged.object_id).not_to eq subject.object_id
     end
 
     it 'does not change the original instance' do

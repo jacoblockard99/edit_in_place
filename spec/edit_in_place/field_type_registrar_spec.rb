@@ -9,20 +9,20 @@ RSpec.describe FieldTypeRegistrar do
   describe '#dup' do
     before do
       subject.register_all({
-        text: TestFieldType.new('TEXT ARG'),
-        image: TestFieldType.new('IMAGE ARG')
-      })
+                             text: TestFieldType.new('TEXT ARG'),
+                             image: TestFieldType.new('IMAGE ARG')
+                           })
     end
 
     let(:dup) { subject.dup }
 
     it 'duplicates the field types' do
-      expect(dup.find(:text).object_id).to_not eq subject.find(:text).object_id
-      expect(dup.find(:image).object_id).to_not eq subject.find(:image).object_id
+      expect(dup.find(:text).object_id).not_to eq subject.find(:text).object_id
+      expect(dup.find(:image).object_id).not_to eq subject.find(:image).object_id
     end
 
     it 'performs a deep copy of the field types' do
-      expect(dup.find(:text).arg.object_id).to_not eq subject.find(:text).arg.object_id
+      expect(dup.find(:text).arg.object_id).not_to eq subject.find(:text).arg.object_id
     end
 
     it 'copies all fields' do
@@ -53,7 +53,11 @@ RSpec.describe FieldTypeRegistrar do
       end
 
       it 'does not register the name' do
-        registerer[] rescue nil
+        begin
+          registerer[]
+        rescue StandardError
+          nil
+        end
         expect(subject.find('string')).to be_nil
       end
     end
@@ -66,7 +70,11 @@ RSpec.describe FieldTypeRegistrar do
       end
 
       it 'does not register the name' do
-        registerer[] rescue nil
+        begin
+          registerer[]
+        rescue StandardError
+          nil
+        end
         expect(subject.find(:text)).to be_nil
       end
     end
@@ -74,7 +82,7 @@ RSpec.describe FieldTypeRegistrar do
     context 'with a valid field type that is an instance of a subclass of FieldType' do
       before { subject.register :text, TestFieldType.new('TEXT') }
 
-      it 'registers it'do
+      it 'registers it' do
         expect(subject.find(:text).arg).to eq 'TEXT'
       end
     end
@@ -82,14 +90,18 @@ RSpec.describe FieldTypeRegistrar do
 
   describe '#register_all' do
     context 'with an invalid enumerable' do
-      let(:registerer) { -> { subject.register_all([:valid, :keys, :but, :no, :values]) } }
+      let(:registerer) { -> { subject.register_all(%i[valid keys but no values]) } }
 
       it 'raises any error' do
         expect(&registerer).to raise_error RuntimeError
       end
-      
+
       it 'registers no field types' do
-        registerer[] rescue nil
+        begin
+          registerer[]
+        rescue StandardError
+          nil
+        end
         expect(subject.all).to be_empty
       end
     end
@@ -100,9 +112,9 @@ RSpec.describe FieldTypeRegistrar do
       let(:registerer) do
         lambda do
           subject.register_all({
-            text: TestFieldType.new('TEXT'),
-            image: TestFieldType.new('IMAGE')
-          })
+                                 text: TestFieldType.new('TEXT'),
+                                 image: TestFieldType.new('IMAGE')
+                               })
         end
       end
 
@@ -111,12 +123,20 @@ RSpec.describe FieldTypeRegistrar do
       end
 
       it 'registers no new field types' do
-        registerer[] rescue nil
+        begin
+          registerer[]
+        rescue StandardError
+          nil
+        end
         expect(subject.all.count).to eq 1
       end
 
       it 'does not modify the existing field type' do
-        registerer[] rescue nil
+        begin
+          registerer[]
+        rescue StandardError
+          nil
+        end
         expect(subject.find(:image).arg).to eq 'EXISTING IMAGE'
       end
     end
@@ -125,9 +145,9 @@ RSpec.describe FieldTypeRegistrar do
       let(:registerer) do
         lambda do
           subject.register_all({
-            :image => TestFieldType.new('IMAGE'),
-            'text' => TestFieldType.new('TEXT')
-          })
+                                 :image => TestFieldType.new('IMAGE'),
+                                 'text' => TestFieldType.new('TEXT')
+                               })
         end
       end
 
@@ -136,7 +156,11 @@ RSpec.describe FieldTypeRegistrar do
       end
 
       it 'registers no field types' do
-        registerer[] rescue nil
+        begin
+          registerer[]
+        rescue StandardError
+          nil
+        end
         expect(subject.all).to be_empty
       end
     end
@@ -145,9 +169,9 @@ RSpec.describe FieldTypeRegistrar do
       let(:registerer) do
         lambda do
           subject.register_all({
-            image: TestFieldType.new('IMAGE'),
-            text: 'random object'
-          })
+                                 image: TestFieldType.new('IMAGE'),
+                                 text: 'random object'
+                               })
         end
       end
 
@@ -156,7 +180,11 @@ RSpec.describe FieldTypeRegistrar do
       end
 
       it 'registers no field types' do
-        registerer[] rescue nil
+        begin
+          registerer[]
+        rescue StandardError
+          nil
+        end
         expect(subject.all).to be_empty
       end
     end
@@ -164,10 +192,10 @@ RSpec.describe FieldTypeRegistrar do
     context 'with a valid hash of field types' do
       before do
         subject.register_all({
-          text: TestFieldType.new('TEXT'),
-          image: TestFieldType.new('IMAGE'),
-          bool: TestFieldType.new('BOOL')
-        })
+                               text: TestFieldType.new('TEXT'),
+                               image: TestFieldType.new('IMAGE'),
+                               bool: TestFieldType.new('BOOL')
+                             })
       end
 
       it 'registers exactly three field types' do
@@ -182,9 +210,10 @@ RSpec.describe FieldTypeRegistrar do
     end
   end
 
-  context '#find' do
+  describe '#find' do
     context 'with an existing name' do
       let(:field_type) { TestFieldType.new('EXISTING') }
+
       before { subject.register :existing, field_type }
 
       it 'returns the associated field type' do
@@ -199,14 +228,15 @@ RSpec.describe FieldTypeRegistrar do
     end
   end
 
-  context '#all' do
+  describe '#all' do
     before do
       subject.register_all({
-        one: TestFieldType.new('ONE'),
-        two: TestFieldType.new('TWO'),
-        three: TestFieldType.new('THREE')
-      })
+                             one: TestFieldType.new('ONE'),
+                             two: TestFieldType.new('TWO'),
+                             three: TestFieldType.new('THREE')
+                           })
     end
+
     let(:all) { subject.all }
 
     it 'returns the correct number of field types' do
@@ -220,13 +250,13 @@ RSpec.describe FieldTypeRegistrar do
     end
 
     it 'duplicates the field' do
-      expect(all[:one].object_id).to_not eq subject.find(:one).object_id
-      expect(all[:two].object_id).to_not eq subject.find(:two).object_id
-      expect(all[:three].object_id).to_not eq subject.find(:three).object_id
+      expect(all[:one].object_id).not_to eq subject.find(:one).object_id
+      expect(all[:two].object_id).not_to eq subject.find(:two).object_id
+      expect(all[:three].object_id).not_to eq subject.find(:three).object_id
     end
 
     it 'performs a deep copy of the field types' do
-      expect(all[:one].arg.object_id).to_not eq subject.find(:one).arg.object_id
+      expect(all[:one].arg.object_id).not_to eq subject.find(:one).arg.object_id
     end
   end
 end

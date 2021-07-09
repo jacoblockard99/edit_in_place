@@ -27,7 +27,7 @@ module EditInPlace
     # @yieldreturn [void]
     # @return [void]
     # @see EditInPlace.configure
-    def configure(&block)
+    def configure
       yield config if block_given?
     end
 
@@ -70,7 +70,7 @@ module EditInPlace
     # @return [void]
     def inject_field_options!(args)
       options = args.first
-      
+
       return if options.is_a? FieldOptions
 
       if options.is_a? Hash

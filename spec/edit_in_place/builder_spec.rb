@@ -5,12 +5,12 @@ require 'support/complex_test_field_type'
 include EditInPlace
 
 RSpec.describe Builder do
+  subject { Builder.new }
+
   before do
     # Reset the global configuration.
     EditInPlace.config = Configuration.new
   end
-
-  subject { Builder.new }
 
   describe '#initialize' do
     before do
