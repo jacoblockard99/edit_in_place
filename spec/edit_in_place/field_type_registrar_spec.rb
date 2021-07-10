@@ -6,12 +6,6 @@ require 'support/test_field_type'
 RSpec.describe EditInPlace::FieldTypeRegistrar do
   let(:registrar) { described_class.new }
 
-  def safe
-    yield if block_given?
-  rescue EditInPlace::Error
-    nil
-  end
-
   describe '#dup' do
     before do
       registrar.register_all({
@@ -67,7 +61,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'does not register the name' do
-        safe { register }
+        ignore { register }
         expect(registrar.find('string')).to be_nil
       end
     end
@@ -82,7 +76,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'does not register the name' do
-        safe { register }
+        ignore { register }
         expect(registrar.find(:text)).to be_nil
       end
     end
@@ -107,7 +101,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'registers no field types' do
-        safe { register }
+        ignore { register }
         expect(registrar.all).to be_empty
       end
     end
@@ -127,12 +121,12 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'registers no new field types' do
-        safe { registrar }
+        ignore { registrar }
         expect(registrar.all.count).to eq 1
       end
 
       it 'does not modify the existing field type' do
-        safe { registrar }
+        ignore { registrar }
         expect(registrar.find(:image).arg).to eq 'EXISTING IMAGE'
       end
     end
@@ -150,7 +144,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'registers no field types' do
-        safe { register }
+        ignore { register }
         expect(registrar.all).to be_empty
       end
     end
@@ -168,7 +162,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'registers no field types' do
-        safe { register }
+        ignore { register }
         expect(registrar.all).to be_empty
       end
     end
