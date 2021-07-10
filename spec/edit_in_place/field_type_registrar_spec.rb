@@ -78,7 +78,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'raises an appropriate error' do
-        expect { register}.to raise_error 'The field type must be an instance of FieldType!'
+        expect { register }.to raise_error 'The field type must be an instance of FieldType!'
       end
 
       it 'does not register the name' do
@@ -222,7 +222,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
     before do
       registrar.register_all({
         one: TestFieldType.new('ONE'),
-        two: TestFieldType.new('TWO'),
+        two: TestFieldType.new('TWO')
       })
     end
 

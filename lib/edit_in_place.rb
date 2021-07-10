@@ -14,19 +14,19 @@ require 'edit_in_place/field_type_registrar'
 # @author Jacob Lockard
 # @since 0.1.0
 module EditInPlace
-  @@config = Configuration.new
+  @config = Configuration.new
 
   # Gets the global configuration for the edit_in_place plugin.
   # @return [Configuration] the global configuration.
   def self.config
-    @@config
+    @config
   end
 
   # Sets the global configuration for the edit_in_place plugin.
   # @param config [Configuration] The global configuration.
   # @return [void]
   def self.config=(config)
-    @@config = config
+    @config = config
   end
 
   # Configures the edit_in_place plugin by yielding the global configuration to the given block.

@@ -36,8 +36,13 @@ module EditInPlace
     # @return [void]
     # @see #register
     def register_all(field_types)
+      # The identical loops are necessary to prevent any middlewares from running if even one
+      # fails the validation.
+
+      # rubocop:disable Style/CombinableLoops
       field_types.each { |n, t| validate_registration!(n, t) }
       field_types.each { |n, t| register(n, t) }
+      # rubocop:enable Style/CombinableLoops
     end
 
     # Attempts to find a {FieldType} associated with the given symbol name.
@@ -60,7 +65,7 @@ module EditInPlace
     # @return [Hash<(Symbol, FieldType)>] A hash of registered {FieldType} instances.
     attr_reader :field_types
 
-    # Ensures that the given name – field type pair is valid, able to be registered in the
+    # Ensures that the given name--field type pair is valid, able to be registered in the
     # registrar. An error will raised if the registration fails validation. A registration is
     # valid if:
     # 1. the name is not already taken,

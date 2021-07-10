@@ -21,11 +21,11 @@ RSpec.describe EditInPlace::Builder do
     end
 
     it 'begins with the field types of the global configuration' do
-      expect(subject.config.field_types.find(:text).arg).to eq 'text field'
+      expect(builder.config.field_types.find(:text).arg).to eq 'text field'
     end
 
     it 'beings with the field options of the global configuration' do
-      expect(subject.config.field_options.mode).to eq :seeing
+      expect(builder.config.field_options.mode).to eq :seeing
     end
 
     it 'is not affected by further changes to the global configuration' do
@@ -37,8 +37,8 @@ RSpec.describe EditInPlace::Builder do
 
   describe '#configure' do
     it 'yields the configuration' do
-      subject.configure do |c|
-        expect(c).to eq subject.config
+      builder.configure do |c|
+        expect(c).to eq builder.config
       end
     end
 

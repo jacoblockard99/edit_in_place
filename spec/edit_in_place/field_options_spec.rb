@@ -118,7 +118,7 @@ RSpec.describe EditInPlace::FieldOptions do
     it 'merges the mode' do
       expect(merged.mode).to eq :new
     end
-    
+
     it 'merges the view' do
       expect(merged.view).to eq 'new view'
     end

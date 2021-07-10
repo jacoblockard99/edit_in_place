@@ -12,7 +12,7 @@ RSpec.describe EditInPlace::ExtendedBuilder do
   it 'delegates methods from the base builder' do
     expect(extended_again).to respond_to :field
   end
-  
+
   it 'delegates methods from the middle builder' do
     expect(extended_again).to respond_to :an_extension
   end

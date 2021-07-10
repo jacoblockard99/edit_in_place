@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
     'edit_in_place' is a Ruby on Rails gemified plugin that facilitates the creation of user interfaces that allow the user to edit typically static content "in place" in a natural way.
   DESC
   spec.license = 'MIT'
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.5.0')
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.

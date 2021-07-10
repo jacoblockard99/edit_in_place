@@ -34,13 +34,11 @@ module EditInPlace
       %i[viewing editing]
     end
 
-    # Creates a deep copy of this {FieldType} that can be safely modified.
-    # @return [FieldType] a deep copy of this field type.
-    # @note This method should be overriden as necessary by subclasses to duplicate any added
-    #   data.
-    def dup
-      super
-    end
+    # @!method dup
+    #   Should create a deep copy of this {FieldType} that can be safely modified.
+    #   @return [FieldType] a deep copy of this field type.
+    #   @note This method should be overriden as necessary by subclasses to duplicate any added
+    #     data.
 
     protected
 

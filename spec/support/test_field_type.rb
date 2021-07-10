@@ -5,6 +5,8 @@ class TestFieldType < EditInPlace::FieldType
 
   def initialize(arg)
     @arg = arg
+
+    super()
   end
 
   def dup
