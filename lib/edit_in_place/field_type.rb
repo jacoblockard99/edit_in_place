@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EditInPlace
   # Represents a single type of field. A field is a single, self-contained component that
   # displays data in various "modes", typically either "viewing" or "editing". Field types

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EditInPlace
   # Stores configuration for an edit_in_place {Builder}.
   #

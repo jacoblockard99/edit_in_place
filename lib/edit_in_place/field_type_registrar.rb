@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EditInPlace
   # Stores a list of {FieldType} instances registered with symbol names.
   #

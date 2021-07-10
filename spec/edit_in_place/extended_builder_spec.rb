@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'rails_helper'
 require 'support/test_extended_builder'
 require 'support/another_extended_builder'

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative 'lib/edit_in_place/version'
 
 Gem::Specification.new do |spec|

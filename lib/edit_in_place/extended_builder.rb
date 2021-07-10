@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EditInPlace
   # A base class that allows one to easily and safely extend the {Builder} class with additional
   # functionality. Every {ExtendedBuilder} contains a base builder to which it delegates all

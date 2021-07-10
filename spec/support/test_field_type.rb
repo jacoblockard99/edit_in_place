@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class TestFieldType < EditInPlace::FieldType
   attr_reader :arg
 

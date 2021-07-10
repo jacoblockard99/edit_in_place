@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EditInPlace
   # A class that stores the options and context required to render a field.
   #

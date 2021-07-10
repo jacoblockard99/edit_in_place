@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module EditInPlace
   # The class that provides the actual functionality to build and render editable content. This
   # class will usually be instantiated in a controller and passed somehow to a view. The view can
