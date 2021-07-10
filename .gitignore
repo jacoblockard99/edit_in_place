@@ -11,3 +11,5 @@
 .byebug_history
 Gemfile.lock
 .yardoc
+
+coverage
