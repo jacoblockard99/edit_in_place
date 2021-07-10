@@ -3,17 +3,15 @@ require 'rails_helper'
 RSpec.describe EditInPlace do
   before do
     # Reset the global configuration.
-    EditInPlace.config = Configuration.new
+    EditInPlace.config = EditInPlace::Configuration.new
   end
 
   describe '.config=' do
-    before do
-      c = Configuration.new
+    it 'sets the global configuration' do
+      c = EditInPlace::Configuration.new
       c.field_options.mode = :editing
       EditInPlace.config = c
-    end
 
-    it 'sets the global configuration' do
       expect(EditInPlace.config.field_options.mode).to eq :editing
     end
   end

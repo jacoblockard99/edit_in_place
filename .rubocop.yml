@@ -1,5 +1,7 @@
 AllCops:
   NewCops: enable
+  Exclude:
+    - 'spec/dummy/**/*'
 Layout/LineLength:
   Max: 120
 Style/GuardClause:
@@ -7,5 +9,7 @@ Style/GuardClause:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
 require:
   - rubocop-rspec
