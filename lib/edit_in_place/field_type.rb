@@ -46,7 +46,7 @@ module EditInPlace
     # @param mode [Symbol] the mode to validate.
     # @return [void]
     def validate_mode!(mode)
-      raise "The mode '#{mode}' is not supported by this field type!" unless supported_modes.include? mode
+      raise UnsupportedModeError, mode unless supported_modes.include? mode
     end
   end
 end

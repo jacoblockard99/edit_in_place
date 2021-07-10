@@ -62,14 +62,14 @@ RSpec.describe EditInPlace::Builder do
   describe '#field' do
     context 'with invalid type' do
       it 'raises an appropriate error' do
-        error = 'That is not a valid field type!'
+        error = EditInPlace::InvalidFieldTypeError
         expect { builder.field('random field type', 'some', 'args') }.to raise_error error
       end
     end
 
     context 'with unregistered type name' do
       it 'raise an appropriate error' do
-        error = 'No field types are registered with that name!'
+        error = EditInPlace::UnregisteredFieldTypeError
         expect { builder.field(:random_type, 'some', 'args') }.to raise_error error
       end
     end

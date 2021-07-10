@@ -93,9 +93,12 @@ module EditInPlace
       when FieldType
         type
       when Symbol
-        config.field_types.find(type) || raise('No field types are registered with that name!')
+        result = config.field_types.find(type)
+        raise UnregisteredFieldTypeError, type if result.nil?
+
+        result
       else
-        raise 'That is not a valid field type!'
+        raise InvalidFieldTypeError, type
       end
     end
   end

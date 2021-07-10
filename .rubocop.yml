@@ -3,7 +3,7 @@ AllCops:
   Exclude:
     - 'spec/dummy/**/*'
 Layout/LineLength:
-  Max: 120
+  Max: 100
 Style/GuardClause:
   Enabled: false
 Metrics/BlockLength:

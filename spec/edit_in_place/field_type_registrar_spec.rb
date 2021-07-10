@@ -8,7 +8,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
 
   def safe
     yield if block_given?
-  rescue
+  rescue EditInPlace::Error
     nil
   end
 
@@ -48,7 +48,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       before { registrar.register :existing, TestFieldType.new('EXISTING') }
 
       it 'raises an appropriate error' do
-        error = 'That field type name has already been registered!'
+        error = EditInPlace::DuplicateFieldTypeRegistrationError
         expect { registrar.register :existing, 'object' }.to raise_error error
       end
 
@@ -63,7 +63,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'raises an appropriate error' do
-        expect { register }.to raise_error 'The name must be a symbol!'
+        expect { register }.to raise_error EditInPlace::InvalidFieldTypeNameError
       end
 
       it 'does not register the name' do
@@ -78,7 +78,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'raises an appropriate error' do
-        expect { register }.to raise_error 'The field type must be an instance of FieldType!'
+        expect { register }.to raise_error EditInPlace::InvalidFieldTypeError
       end
 
       it 'does not register the name' do
@@ -103,7 +103,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'raises any error' do
-        expect { register }.to raise_error RuntimeError
+        expect { register }.to raise_error EditInPlace::InvalidFieldTypeError
       end
 
       it 'registers no field types' do
@@ -123,7 +123,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'raise an appropriate error' do
-        expect { register }.to raise_error 'That field type name has already been registered!'
+        expect { register }.to raise_error EditInPlace::DuplicateFieldTypeRegistrationError
       end
 
       it 'registers no new field types' do
@@ -146,7 +146,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'raises an appropriate error' do
-        expect { register }.to raise_error 'The name must be a symbol!'
+        expect { register }.to raise_error EditInPlace::InvalidFieldTypeNameError
       end
 
       it 'registers no field types' do
@@ -164,7 +164,7 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
       end
 
       it 'raise an appropriate error' do
-        expect { register }.to raise_error 'The field type must be an instance of FieldType!'
+        expect { register }.to raise_error EditInPlace::InvalidFieldTypeError
       end
 
       it 'registers no field types' do
