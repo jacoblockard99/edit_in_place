@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'edit_in_place/version'
 require 'edit_in_place/railtie'
 require 'edit_in_place/builder'
