@@ -75,9 +75,7 @@ module EditInPlace
     # @param field_type [FieldType] the field type to validate.
     # @return [void]
     def validate_registration!(name, field_type)
-      if field_types.key?(name) && (field_types.key? name)
-        raise DuplicateFieldTypeRegistrationError, name
-      end
+      raise DuplicateFieldTypeRegistrationError, name if field_types.key?(name)
       raise InvalidFieldTypeNameError, name unless name.is_a? Symbol
       raise InvalidFieldTypeError, field_type unless field_type.is_a? FieldType
     end
