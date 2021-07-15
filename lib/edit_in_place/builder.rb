@@ -23,6 +23,14 @@ module EditInPlace
       @config = EditInPlace.config.dup
     end
 
+    # Creates a deep copy of this {Builder} that can be safely modified.
+    # @return [Builder] a deep copy of this {Builder}.
+    def dup
+      b = Builder.new
+      b.config = config.dup
+      b
+    end
+
     # Configures this {Builder} by yielding its configuration to the given block.
     # @yieldparam config [Configuration] the {Configuration} instance associated with this
     #   {Builder}.
@@ -61,6 +69,15 @@ module EditInPlace
 
       type = evaluate_field_type(type)
       type.render(*args)
+    end
+
+    def scoped(field_options = {})
+      field_options = FieldOptions.new(field_options) unless field_options.is_a? FieldOptions
+
+      scoped_builder = dup
+      scoped_builder.config.field_options.merge!(field_options)
+
+      yield scoped_builder
     end
 
     private

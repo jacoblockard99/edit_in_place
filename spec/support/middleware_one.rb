@@ -3,7 +3,7 @@
 require 'middlegem'
 
 class MiddlewareOne < Middlegem::Middleware
-  def call(options, input)
-    [options, "#{input}*ONE*"]
+  def call(options, input, *args)
+    [options, "#{input}*ONE*", *args]
   end
 end
