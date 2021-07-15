@@ -40,6 +40,7 @@ module EditInPlace
       self.middlewares = options[:middlewares] || []
     end
 
+    # Documentation for this method resides in the attribute declaration.
     def mode=(mode)
       @mode = mode.nil? ? nil : mode.to_sym
     end
