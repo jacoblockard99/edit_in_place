@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module EditInPlace
-  # A subcalss of {Registrar} that stores a list of {FieldType} instances registered with symbol
-  # names.
+  # {FieldTypeRegistrar} is a subcalss of {Registrar} that only allows {FieldType}
+  # instances to be registered.
   #
   # @author Jacob Lockard
   # @since 0.1.0

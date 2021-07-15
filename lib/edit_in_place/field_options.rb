@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module EditInPlace
-  # A class that stores the options and context required to render a field.
+  # {FieldOptions} is a class that stores the options and context required to render a field.
   #
   # @author Jacob Lockard
   # @since 0.1.0
@@ -46,9 +46,6 @@ module EditInPlace
 
     # Creates a deep copy of this {FieldOptions} instance that can be safely modified.
     # @return [FieldOptions] a deep copy of this {FieldOptions} instance.
-    # @note The current implementation of {#dup} does nothing different than the default
-    #   implementation. More fields that need to be duplicated will likely be added in the
-    #   future, however.
     def dup
       f = FieldOptions.new
       f.mode = mode
@@ -59,7 +56,8 @@ module EditInPlace
 
     # Merges the given {FieldOptions} instance into this one. Modes and view contexts from the
     # other instance will overwrite those in this instance if present. The other instance is
-    # duplicated before being merged, so it can be safely modified after the fact.
+    # duplicated before being merged, so it can be safely modified after the fact. All
+    # middleware arrays will be merged.
     # @param other [FieldOptions] the other field options to merge into this one.
     # @return [void]
     def merge!(other)

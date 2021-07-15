@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 module EditInPlace
-  # Represents a single type of field. A field is a single, self-contained component that
-  # displays data in various "modes", typically either "viewing" or "editing". Field types
-  # provide the templates for similar fields.
+  # {FieldType} is a class that represents a single type of field. A field is a single,
+  # self-contained component that displays data in various "modes", typically either "viewing" or
+  # "editing". Field types provide the templates for similar fields.
   #
   # @abstract
   # @author Jacob Lockard
   # @since 0.1.0
   class FieldType
-    # Render the field given a {FieldOptions} instance and an array of arguments passed by
+    # Render the field, given a {FieldOptions} instance and an array of arguments passed by
     # the caller.
     #
     # While subclasses may override this method as appropriate, the default
