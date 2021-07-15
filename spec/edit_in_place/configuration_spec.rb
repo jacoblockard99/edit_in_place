@@ -22,6 +22,10 @@ RSpec.describe EditInPlace::Configuration do
     it 'sets up a FieldOptions with an empty middleware array' do
       expect(config.field_options.middlewares).to eq []
     end
+
+    it 'sets up an empty defined middlewares array' do
+      expect(config.defined_middlewares).to eq []
+    end
   end
 
   describe '#dup' do
@@ -31,6 +35,7 @@ RSpec.describe EditInPlace::Configuration do
         image: TestFieldType.new('image field'),
         bool: TestFieldType.new('bool field')
       })
+      config.defined_middlewares = [TestMiddleware.new]
     end
 
     let(:dup) { config.dup }
@@ -47,14 +52,28 @@ RSpec.describe EditInPlace::Configuration do
       expect(dup.field_options.object_id).not_to eq config.field_options.object_id
     end
 
+    it 'duplicates the defined middlewares array' do
+      expect(dup.defined_middlewares.object_id).not_to eq config.defined_middlewares.object_id
+    end
+
     it 'performs a deep copy of the FieldTypeRegistrar' do
       actual = dup.field_types.find(:text).object_id
       expect(actual).not_to eq config.field_types.find(:text).object_id
     end
 
-    it 'can be safely modified' do
+    it 'performs a deep copy of the middlewares array' do
+      actual = dup.defined_middlewares[0].object_id
+      expect(actual).not_to eq config.defined_middlewares[0].object_id
+    end
+
+    it 'has a FieldTypeRegistrar that can be safely modified' do
       dup.field_types.register(:new, TestFieldType.new('NEW'))
       expect(config.field_types.find(:new)).to be_nil
+    end
+
+    it 'has a defined middlewares array that can be safely modified' do
+      dup.defined_middlewares << TestMiddleware.new
+      expect(config.defined_middlewares.count).to eq 1
     end
   end
 end
