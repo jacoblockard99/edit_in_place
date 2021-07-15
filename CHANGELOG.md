@@ -10,5 +10,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - The initial `edit_in_place` gem.
 
-[Unreleased]: https://github.com/jacoblockard99/middlegem/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/jacoblockard99/middlegem/releases/tag/v0.1.0
+[Unreleased]: https://github.com/jacoblockard99/edit_in_place/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/jacoblockard99/edit_in_place/releases/tag/v0.1.0
