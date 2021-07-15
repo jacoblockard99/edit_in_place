@@ -13,6 +13,11 @@ RSpec.describe EditInPlace::Builder do
   before do
     # Reset the global configuration.
     EditInPlace.config = EditInPlace::Configuration.new
+    EditInPlace.config.defined_middlewares = [
+      MiddlewareOne,
+      MiddlewareTwo,
+      MiddlewareThree
+    ]
   end
 
   describe '#initialize' do
@@ -42,6 +47,7 @@ RSpec.describe EditInPlace::Builder do
     before do
       builder.config.field_options.middlewares = ['example', :another]
     end
+
     let(:dup) { builder.dup }
 
     it 'returns a different instance' do
@@ -151,14 +157,7 @@ RSpec.describe EditInPlace::Builder do
 
     context 'with middlewares' do
       before do
-        EditInPlace.configure do |c|
-          c.defined_middlewares = [
-            MiddlewareOne,
-            MiddlewareTwo,
-            MiddlewareThree
-          ]
-          c.field_options.middlewares << MiddlewareThree.new
-        end
+        EditInPlace.config.field_options.middlewares << MiddlewareThree.new
         builder.config.field_options.middlewares << MiddlewareOne.new
       end
 
@@ -168,6 +167,34 @@ RSpec.describe EditInPlace::Builder do
       it 'applies them' do
         actual = builder.field(field_type, field_options, 'ARG')
         expect(actual).to eq 'Init: Test!, After: ARG*ONE*!TWO!$THREE$'
+      end
+    end
+  end
+
+  describe '#scoped' do
+    let(:field_options) { { mode: :editing, middlewares: [MiddlewareOne.new] } }
+    let(:scoped) do
+      scoped = nil
+      builder.scoped(field_options) { |s| scoped = s }
+      scoped
+    end
+    let(:rendered) { scoped.field(ComplexTestFieldType.new, 'input', '&') }
+
+    context 'when given a valid hash of field options' do
+      it 'applies them to the scoped builder' do
+        expect(rendered).to eq '||& |input*ONE*| &||'
+      end
+
+      it 'does not change the orginal builder' do
+        expect(builder.config.field_options.mode).to eq :viewing
+      end
+    end
+
+    context 'when given a FieldOptions instance' do
+      let(:field_options) { EditInPlace::FieldOptions.new(mode: :editing) }
+
+      it 'applies it correctly to the scoped builder' do
+        expect(rendered).to eq '||& |input| &||'
       end
     end
   end

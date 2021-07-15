@@ -71,6 +71,15 @@ module EditInPlace
       type.render(*args)
     end
 
+    def scoped(field_options = {})
+      field_options = FieldOptions.new(field_options) unless field_options.is_a? FieldOptions
+
+      scoped_builder = dup
+      scoped_builder.config.field_options.merge!(field_options)
+
+      yield scoped_builder
+    end
+
     private
 
     # Ensures that the first argument in the given list of arguments is a valid, appropriate
