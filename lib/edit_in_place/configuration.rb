@@ -33,7 +33,8 @@ module EditInPlace
       c = Configuration.new
       c.field_types = field_types.dup
       c.field_options = field_options.dup
-      c.defined_middlewares = defined_middlewares.deep_dup
+      # Note that this is purposely NOT a deep copy---it doesn't make sense to duplicate classes.
+      c.defined_middlewares = defined_middlewares.dup
       c
     end
   end

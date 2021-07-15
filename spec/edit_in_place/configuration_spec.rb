@@ -61,9 +61,9 @@ RSpec.describe EditInPlace::Configuration do
       expect(actual).not_to eq config.field_types.find(:text).object_id
     end
 
-    it 'performs a deep copy of the middlewares array' do
+    it 'does not perform a deep copy of the middlewares array' do
       actual = dup.defined_middlewares[0].object_id
-      expect(actual).not_to eq config.defined_middlewares[0].object_id
+      expect(actual).to eq config.defined_middlewares[0].object_id
     end
 
     it 'has a FieldTypeRegistrar that can be safely modified' do
