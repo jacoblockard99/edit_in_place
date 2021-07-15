@@ -53,9 +53,6 @@ module EditInPlace
 end
 
 require 'edit_in_place/invalid_field_type_error'
-require 'edit_in_place/invalid_field_type_name_error'
 require 'edit_in_place/unregistered_field_type_error'
-require 'edit_in_place/duplicate_field_type_registration_error'
-
 require 'edit_in_place/invalid_registration_name_error'
 require 'edit_in_place/duplicate_registration_error'

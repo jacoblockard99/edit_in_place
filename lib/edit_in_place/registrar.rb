@@ -83,3 +83,5 @@ module EditInPlace
         ERR
       end
     end
+  end
+end
