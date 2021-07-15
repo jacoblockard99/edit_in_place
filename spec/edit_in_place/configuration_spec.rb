@@ -18,6 +18,10 @@ RSpec.describe EditInPlace::Configuration do
     it 'sets up a FieldOptions with the default mode' do
       expect(config.field_options.mode).to eq described_class::DEFAULT_MODE
     end
+
+    it 'sets up a FieldOptions with an empty middleware array' do
+      expect(config.field_options.middlewares).to eq []
+    end
   end
 
   describe '#dup' do
