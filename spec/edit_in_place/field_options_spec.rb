@@ -145,7 +145,7 @@ RSpec.describe EditInPlace::FieldOptions do
     context 'when both instances contain middlewares' do
       let(:middleware) { TestMiddleware.new }
       let(:field_options) { described_class.new(middlewares: [:one, :two, middleware]) }
-      let(:other) { described_class.new(middlewares: [:three, :four]) }
+      let(:other) { described_class.new(middlewares: %i[three four]) }
 
       it 'merges the middleware arrays' do
         expected = [:one, :two, middleware, :three, :four]
@@ -156,10 +156,10 @@ RSpec.describe EditInPlace::FieldOptions do
 
   describe '#merge' do
     let(:field_options) do
-      described_class.new(mode: :old, view: 'old view', middlewares: [:one, :two])
+      described_class.new(mode: :old, view: 'old view', middlewares: %i[one two])
     end
     let(:other) do
-      described_class.new(mode: :new, view: 'new view', middlewares: [:three, :four])
+      described_class.new(mode: :new, view: 'new view', middlewares: %i[three four])
     end
     let(:merged) { field_options.merge(other) }
 
@@ -172,7 +172,7 @@ RSpec.describe EditInPlace::FieldOptions do
     end
 
     it 'merges the middlewares' do
-      expect(merged.middlewares).to match_array [:one, :two, :three, :four]
+      expect(merged.middlewares).to match_array %i[one two three four]
     end
 
     it 'returns a new instance' do
@@ -188,11 +188,11 @@ RSpec.describe EditInPlace::FieldOptions do
     end
 
     it 'does not change the original middlewares' do
-      expect(field_options.middlewares).to eq [:one, :two]
+      expect(field_options.middlewares).to eq %i[one two]
     end
 
     it 'does not change the other original middlewares' do
-      expect(other.middlewares).to eq [:three, :four]
+      expect(other.middlewares).to eq %i[three four]
     end
   end
 end

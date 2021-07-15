@@ -141,6 +141,7 @@ RSpec.describe EditInPlace::Builder do
         end
         builder.config.field_options.middlewares << MiddlewareOne.new
       end
+
       let(:field_options) { { middlewares: [MiddlewareTwo.new] } }
       let(:field_type) { TestFieldType.new('Test!') }
 
