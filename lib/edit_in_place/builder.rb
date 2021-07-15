@@ -34,7 +34,7 @@ module EditInPlace
     end
 
     # Configures this {Builder} by yielding its configuration to the given block. For example,
-    # 
+    #
     #   @builder = EditInPlace::Builder.new
     #   @builder.configure do |c|
     #     c.field_options.mode = :editing
