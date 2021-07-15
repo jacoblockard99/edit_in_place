@@ -25,7 +25,7 @@ module EditInPlace
     # @return [void]
     # @see #register_all
     def register(name, object)
-      validate_name!(name)
+      validate_registration!(name, object)
       registrations[name] = object
     end
 
@@ -39,7 +39,7 @@ module EditInPlace
       # fails the validation.
 
       # rubocop:disable Style/CombinableLoops
-      objects.each { |n, _t| validate_name!(n) }
+      objects.each { |n, t| validate_registration!(n, t) }
       objects.each { |n, t| register(n, t) }
       # rubocop:enable Style/CombinableLoops
     end
@@ -59,17 +59,18 @@ module EditInPlace
       registrations.deep_dup
     end
 
-    private
+    protected
 
     # @return [Hash<(Symbol, Object)>] A hash of registrations.
     attr_reader :registrations
 
-    # Ensures that the given name is a valid registration name. A valid name must 1) not already
-    # be taken, and 2) be a symbol.
+    # Should ensure that the given registration is valid. By default a registration is valid is
+    # its name is not already taken and is a symbol. Subclasses may override this method to add
+    # validation rules.
     # @param name [Symbol] the name to validate.
     # @param object [Object] the object to validate.
     # @return [void]
-    def validate_name!(name)
+    def validate_registration!(name, _object)
       if registrations.key?(name)
         raise DuplicateRegistrationError, <<~ERR
           The name '#{name}' has already been registered!
@@ -82,5 +83,3 @@ module EditInPlace
         ERR
       end
     end
-  end
-end
