@@ -23,6 +23,10 @@ module EditInPlace
     # @return the view context to be used when rendering the field.
     attr_accessor :view
 
+    # An array of middleware instances that should be applied to the field's input.
+    # @return the array of middlewares.
+    attr_accessor :middlewares
+
     # @overload initialize(options)
     #   Creates a new instance of {FieldOptions} with the given options.
     #   @param options [Hash, #[]] a hash containing the given field options.
@@ -33,6 +37,7 @@ module EditInPlace
     def initialize(options = {})
       self.mode = options[:mode]
       self.view = options[:view]
+      self.middlewares = options[:middlewares] || []
     end
 
     def mode=(mode)
@@ -48,6 +53,7 @@ module EditInPlace
       f = FieldOptions.new
       f.mode = mode
       f.view = view
+      f.middlewares = middlewares.deep_dup
       f
     end
 
@@ -61,6 +67,7 @@ module EditInPlace
 
       self.mode = other.mode unless other.mode.nil?
       self.view = other.view unless other.view.nil?
+      self.middlewares += other.middlewares
     end
 
     # Creates a _new_ {FieldOptions} instance that is the result of merging the given

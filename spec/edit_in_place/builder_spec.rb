@@ -3,6 +3,9 @@
 require 'rails_helper'
 require 'support/test_field_type'
 require 'support/complex_test_field_type'
+require 'support/middleware_one'
+require 'support/middleware_two'
+require 'support/middleware_three'
 
 RSpec.describe EditInPlace::Builder do
   let(:builder) { described_class.new }
@@ -123,6 +126,28 @@ RSpec.describe EditInPlace::Builder do
         it 'renders correctly' do
           expect(rendered).to eq '||** |Jacob| **||'
         end
+      end
+    end
+
+    context 'with middlewares' do
+      before do
+        EditInPlace.configure do |c|
+          c.defined_middlewares = [
+            MiddlewareOne,
+            MiddlewareTwo,
+            MiddlewareThree
+          ]
+          c.field_options.middlewares << MiddlewareThree.new
+        end
+        builder.config.field_options.middlewares << MiddlewareOne.new
+      end
+
+      let(:field_options) { { middlewares: [MiddlewareTwo.new] } }
+      let(:field_type) { TestFieldType.new('Test!') }
+
+      it 'applies them' do
+        actual = builder.field(field_type, field_options, 'ARG')
+        expect(actual).to eq 'Init: Test!, After: ARG*ONE*!TWO!$THREE$'
       end
     end
   end

@@ -2,13 +2,16 @@
 
 require 'rails_helper'
 require 'edit_in_place'
+require 'support/test_middleware'
 
 RSpec.describe EditInPlace::FieldOptions do
   let(:field_options) { described_class.new }
 
   describe '#initialize' do
     context 'when given options' do
-      let(:field_options) { described_class.new(mode: :example, view: 'random object') }
+      let(:field_options) do
+        described_class.new(mode: :example, view: 'random object', middlewares: [:random])
+      end
 
       it 'sets the mode' do
         expect(field_options.mode).to eq :example
@@ -16,6 +19,10 @@ RSpec.describe EditInPlace::FieldOptions do
 
       it 'sets the view' do
         expect(field_options.view).to eq 'random object'
+      end
+
+      it 'sets the middlewares' do
+        expect(field_options.middlewares).to eq [:random]
       end
     end
 
@@ -32,6 +39,14 @@ RSpec.describe EditInPlace::FieldOptions do
 
       it 'sets the mode to nil' do
         expect(field_options.mode).to be_nil
+      end
+    end
+
+    context 'when given no middlewares' do
+      let(:field_options) { described_class.new }
+
+      it 'sets the middleares to an empty array' do
+        expect(field_options.middlewares).to eq []
       end
     end
   end
@@ -53,7 +68,13 @@ RSpec.describe EditInPlace::FieldOptions do
   end
 
   describe '#dup' do
-    let(:field_options) { described_class.new(mode: :random, view: 'random view object') }
+    let(:field_options) do
+      described_class.new(
+        mode: :random,
+        view: 'random view object',
+        middlewares: [:random, TestMiddleware.new]
+      )
+    end
 
     let(:dup) { field_options.dup }
 
@@ -67,6 +88,18 @@ RSpec.describe EditInPlace::FieldOptions do
 
     it 'copies the mode' do
       expect(dup.mode).to eq :random
+    end
+
+    it 'copies the middlewares' do
+      expect(dup.middlewares.count).to eq 2
+    end
+
+    it 'duplicates the middlewares' do
+      expect(dup.middlewares.object_id).not_to eq field_options.middlewares.object_id
+    end
+
+    it 'performs a deep duplication of the middlewares' do
+      expect(dup.middlewares[1].object_id).not_to eq field_options.middlewares[1].object_id
     end
   end
 
@@ -108,11 +141,26 @@ RSpec.describe EditInPlace::FieldOptions do
         expect(field_options.mode).to eq :old
       end
     end
+
+    context 'when both instances contain middlewares' do
+      let(:middleware) { TestMiddleware.new }
+      let(:field_options) { described_class.new(middlewares: [:one, :two, middleware]) }
+      let(:other) { described_class.new(middlewares: %i[three four]) }
+
+      it 'merges the middleware arrays' do
+        expected = [:one, :two, middleware, :three, :four]
+        expect(field_options.middlewares).to match_array expected
+      end
+    end
   end
 
   describe '#merge' do
-    let(:field_options) { described_class.new(mode: :old, view: 'old view') }
-    let(:other) { described_class.new(mode: :new, view: 'new view') }
+    let(:field_options) do
+      described_class.new(mode: :old, view: 'old view', middlewares: %i[one two])
+    end
+    let(:other) do
+      described_class.new(mode: :new, view: 'new view', middlewares: %i[three four])
+    end
     let(:merged) { field_options.merge(other) }
 
     it 'merges the mode' do
@@ -121,6 +169,10 @@ RSpec.describe EditInPlace::FieldOptions do
 
     it 'merges the view' do
       expect(merged.view).to eq 'new view'
+    end
+
+    it 'merges the middlewares' do
+      expect(merged.middlewares).to match_array %i[one two three four]
     end
 
     it 'returns a new instance' do
@@ -133,6 +185,14 @@ RSpec.describe EditInPlace::FieldOptions do
 
     it 'does not change the original view' do
       expect(field_options.view).to eq 'old view'
+    end
+
+    it 'does not change the original middlewares' do
+      expect(field_options.middlewares).to eq %i[one two]
+    end
+
+    it 'does not change the other original middlewares' do
+      expect(other.middlewares).to eq %i[three four]
     end
   end
 end
