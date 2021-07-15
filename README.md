@@ -1,5 +1,6 @@
 # EditInPlace
 
+[![Gem Version](https://badge.fury.io/rb/edit_in_place.svg)](https://badge.fury.io/rb/edit_in_place)
 [![Build Status](https://travis-ci.com/jacoblockard99/edit_in_place.svg?branch=master)](https://travis-ci.com/jacoblockard99/edit_in_place)
 [![Inline docs](http://inch-ci.org/github/jacoblockard99/edit_in_place.svg?branch=master)](http://inch-ci.org/github/jacoblockard99/edit_in_place)
 [![Maintainability](https://api.codeclimate.com/v1/badges/389fc591cd9cccb2ceb1/maintainability)](https://codeclimate.com/github/jacoblockard99/edit_in_place/maintainability)
