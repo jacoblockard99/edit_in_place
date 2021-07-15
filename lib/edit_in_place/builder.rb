@@ -23,6 +23,14 @@ module EditInPlace
       @config = EditInPlace.config.dup
     end
 
+    # Creates a deep copy of this {Builder} that can be safely modified.
+    # @return [Builder] a deep copy of this {Builder}.
+    def dup
+      b = Builder.new
+      b.config = config.dup
+      b
+    end
+
     # Configures this {Builder} by yielding its configuration to the given block.
     # @yieldparam config [Configuration] the {Configuration} instance associated with this
     #   {Builder}.

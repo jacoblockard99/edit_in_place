@@ -38,6 +38,26 @@ RSpec.describe EditInPlace::Builder do
     end
   end
 
+  describe '#dup' do
+    before do
+      builder.config.field_options.middlewares = ['example', :another]
+    end
+    let(:dup) { builder.dup }
+
+    it 'returns a different instance' do
+      expect(dup.object_id).not_to eq builder.object_id
+    end
+
+    it 'copies the config' do
+      expect(dup.config.field_options.middlewares).to eq ['example', :another]
+    end
+
+    it 'performs a deep copy of the config' do
+      actual = dup.config.field_options.middlewares[0].object_id
+      expect(actual).not_to eq builder.config.field_options.middlewares[0].object_id
+    end
+  end
+
   describe '#configure' do
     it 'yields the configuration' do
       builder.configure do |c|
