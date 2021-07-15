@@ -16,6 +16,12 @@ module EditInPlace
   #   world_builder.respond_to? :hello # => true
   #   world_builder.respond_to? :field # => true
   #
+  # A word of caution is in order, however! An {ExtendedBuilder} should *never*
+  # override a method on the base builder. While this may seem like a convenient way to add new
+  # methods to {Builder}, it can cause problems, since other methods further along in the chain
+  # will not call the overriden one. {ExtendedBuilder} is intended only for adding new methods,
+  # not mdifying existing ones.
+  #
   # @author Jacob Lockard
   # @since 0.1.0
   class ExtendedBuilder
@@ -26,7 +32,7 @@ module EditInPlace
     delegate_missing_to :base
 
     # Creates a new {ExtendedBuilder} with the given base builder.
-    # @param base [Object] The base builder to extend. It should quack like a {Builder}.
+    # @param base [Object] the base builder to extend. It should quack like a {Builder}.
     def initialize(base)
       @base = base
     end
