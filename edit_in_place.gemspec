@@ -9,8 +9,9 @@ Gem::Specification.new do |spec|
   spec.email       = ['jacoblockard99@gmail.com']
   spec.summary     = 'A Rails plugin that facilitates the creation of intuitive editable content.'
   spec.description = <<~DESC
-    'edit_in_place' is a Ruby on Rails gemified plugin that facilitates the creation of user interfaces that allow the user to edit typically static content "in place" in a natural way.
+    edit_in_place is a Ruby on Rails plugin that allows the creation of user interfaces that allow the user to edit content in an intuitive, natural, "in place" way.
   DESC
+  spec.homepage = 'https://github.com/jacoblockard99/edit_in_place'
   spec.license = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.5.0')
 
@@ -24,7 +25,7 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
-  spec.add_development_dependency 'byebug'
+  spec.add_development_dependency 'byebug', '~> 11.0'
   spec.add_development_dependency 'rspec-rails', '~> 5.0'
   spec.add_development_dependency 'rubocop', '~> 1.18'
   spec.add_development_dependency 'rubocop-rspec', '~> 2.4'
