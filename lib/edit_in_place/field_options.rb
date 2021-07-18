@@ -48,7 +48,7 @@ module EditInPlace
     # Creates a deep copy of this {FieldOptions} instance that can be safely modified.
     # @return [FieldOptions] a deep copy of this {FieldOptions} instance.
     def dup
-      f = FieldOptions.new
+      f = self.class.new
       f.mode = mode
       f.view = view
       f.middlewares = middlewares.map { |m| m.instance_of?(Class) ? m : m.dup }
