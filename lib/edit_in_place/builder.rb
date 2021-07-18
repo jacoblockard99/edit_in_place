@@ -118,6 +118,19 @@ module EditInPlace
     # @since 0.2.0
     alias scope scoped
 
+    # Yields a new, scoped {Builder} with the given middlewares merged into the current ones.
+    # Note that this method is for convenience only and is exactly equivalent to calling
+    # +scoped(middlewares: ...)+.
+    # @yieldparam scoped_builder [Builder] the new, scoped {Builder} instance.
+    # @yieldreturn [string] the output.
+    # @param middlewares [Array] the array of middlewares that the scoped builder should have
+    #   merged into it.
+    # @since 0.2.0
+    def with_middlewares(*middlewares, &block)
+      scoped(middlewares: middlewares, &block)
+    end
+    alias middleware_scope with_middlewares
+
     private
 
     # Ensures that the first argument in the given list of arguments is a valid, appropriate
