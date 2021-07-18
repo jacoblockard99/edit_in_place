@@ -16,7 +16,9 @@ module EditInPlace
     # @return [void]
     def validate_registration!(name, field_type)
       super
-      raise InvalidFieldTypeError, field_type unless field_type.is_a? FieldType
+      unless field_type.is_a?(FieldType) || field_type.instance_of?(Class)
+        raise InvalidFieldTypeError, field_type
+      end
     end
   end
 end
