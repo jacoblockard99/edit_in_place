@@ -124,8 +124,8 @@ module EditInPlace
     # @param middlewares [Array] the array of middlewares that the scoped builder should have
     #   merged into it.
     # @since 0.2.0
-    def with_middlewares(*middlewares)
-      scoped(middlewares: middlewares) { |s| yield s }
+    def with_middlewares(*middlewares, &block)
+      scoped(middlewares: middlewares, &block)
     end
     alias middleware_scope with_middlewares
 
