@@ -49,7 +49,16 @@ module EditInPlace
     # @param middlewares [Array] the middlewares to iterate over.
     # @return [Array] the changed middlewares.
     def lookup_middlewares(middlewares)
-      middlewares.map { |m| m.is_a?(Symbol) ? lookup_middleware(m) : m }
+      middlewares.map do |middleware|
+        case middleware
+        when Class
+          middleware.new
+        when Symbol
+          lookup_middleware(middleware)
+        else
+          middleware
+        end
+      end
     end
 
     # Attempts to find a middleare registered with the given name in the middleare registrar. If
