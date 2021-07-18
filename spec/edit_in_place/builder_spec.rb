@@ -169,6 +169,25 @@ RSpec.describe EditInPlace::Builder do
         expect(actual).to eq 'Init: Test!, After: ARG*ONE*!TWO!$THREE$'
       end
     end
+
+    context 'with unconventional middlewares' do
+      before do
+        EditInPlace.configure do |c|
+          c.defined_middlewares = [MiddlewareOne, MiddlewareTwo, MiddlewareThree]
+          c.registered_middlewares.register :three, MiddlewareThree
+          c.field_options.middlewares << :three
+        end
+        builder.config.field_options.middlewares << MiddlewareOne.new
+      end
+
+      let(:field_options) { { middlewares: [MiddlewareTwo] } }
+      let(:field_type) { TestFieldType.new('Test!') }
+
+      it 'applies them' do
+        actual = builder.field(field_type, field_options, 'ARG')
+        expect(actual).to eq 'Init: Test!, After: ARG*ONE*!TWO!$THREE$'
+      end
+    end
   end
 
   describe '*_field' do
