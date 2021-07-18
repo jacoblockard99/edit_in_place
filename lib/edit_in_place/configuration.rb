@@ -47,7 +47,7 @@ module EditInPlace
     # Creates a deep copy of this {Configuration} that can be safely modified.
     # @return [Configuration] a deep copy of this configuration.
     def dup
-      c = Configuration.new
+      c = self.class.new
       c.field_types = field_types.dup
       c.field_options = field_options.dup
       # Note that this is purposely NOT a deep copy---it doesn't make sense to duplicate classes.

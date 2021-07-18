@@ -51,7 +51,7 @@ module EditInPlace
     # Creates a deep copy of this {Builder}, whose configuration can be safely modified.
     # @return [Builder] a deep copy of this {Builder}.
     def dup
-      b = Builder.new
+      b = self.class.new
       b.config = config.dup
       b
     end
