@@ -171,6 +171,32 @@ RSpec.describe EditInPlace::Builder do
     end
   end
 
+  describe '*_field' do
+    context 'with registered field types' do
+      before do
+        builder.config.field_types.register :text, TestFieldType.new('text')
+      end
+
+      it 'is defined' do
+        expect(builder).to respond_to :text_field
+      end
+
+      it 'renders correctly' do
+        expect(builder.text_field('input')).to eq 'Init: text, After: input'
+      end
+    end
+
+    context 'with unregistered field types' do
+      it 'si not defined' do
+        expect(builder).not_to respond_to :random_field
+      end
+
+      it 'raises an appropriate error' do
+        expect { builder.random_field('input') }.to raise_error NoMethodError
+      end
+    end
+  end
+
   describe '#scoped' do
     let(:field_options) { { mode: :editing, middlewares: [MiddlewareOne.new] } }
     let(:scoped) do

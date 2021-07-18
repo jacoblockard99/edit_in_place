@@ -25,6 +25,27 @@ module EditInPlace
       @config = EditInPlace.config.dup
     end
 
+    # Overrides +method_missing+ to allow methods like +*_field+ to be called for registered
+    # fields. For example, if a +:text+ field type has been registered, then calling
+    # +Builder#text_field(...)+ is equivalent to calling +Builder#field(:text, ...)+.
+    # @param method_name [string] the name of the missing method being called.
+    # @param args [Array] the arguments passed to the missing method.
+    # @yield the block, if any, passed to the missing method.
+    # @return the result of calling {#field} with the appropriate type if possible; the result of
+    #   calling +super+ if not.
+    def method_missing(method_name, *args, &block)
+      field_type = parse_field_method(method_name)
+      field_type ? field(field_type, *args, &block) : super
+    end
+
+    # Overrides +respond_to_missing?+ to allow methods like +*_field+ to be respond to by
+    # {Builder}.
+    # @param method_name [string] the name of the missing method being checked.
+    # @return true if the method name can be responded to by this {Builder}; false otherwise.
+    def respond_to_missing?(method_name, priv = false)
+      parse_field_method(method_name) || super
+    end
+
     # Creates a deep copy of this {Builder}, whose configuration can be safely modified.
     # @return [Builder] a deep copy of this {Builder}.
     def dup
@@ -132,6 +153,14 @@ module EditInPlace
     alias middleware_scope with_middlewares
 
     private
+
+    def parse_field_method(method_name)
+      method_name = method_name.to_s
+      return nil unless method_name.end_with? '_field'
+
+      field_type_name = method_name.delete_suffix('_field').to_sym
+      config.field_types.find(field_type_name)
+    end
 
     # Ensures that the first argument in the given list of arguments is a valid, appropriate
     # {FieldOptions} instance for the list of arguments. In particular:
