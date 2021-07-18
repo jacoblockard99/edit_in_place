@@ -50,14 +50,8 @@ module EditInPlace
     # @return [Array] the changed middlewares.
     def lookup_middlewares(middlewares)
       middlewares.map do |middleware|
-        case middleware
-        when Class
-          middleware.new
-        when Symbol
-          lookup_middleware(middleware)
-        else
-          middleware
-        end
+        middleware = lookup_middleware(middleware) if middleware.is_a? Symbol
+        middleware.is_a?(Class) ? middleware.new : middleware
       end
     end
 
