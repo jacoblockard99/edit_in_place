@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Add magic `*_field` methods to `Builder`.
 - Add `Builder#scope`, an alias for `Builder#scoped`.
 - Add `Builder#with_middlewares` to easily allow scoping a builder with middlewares.
 - The ability to register and use middlewares by name.
