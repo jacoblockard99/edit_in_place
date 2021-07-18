@@ -33,6 +33,7 @@ module EditInPlace
     # @yield the block, if any, passed to the missing method.
     # @return the result of calling {#field} with the appropriate type if possible; the result of
     #   calling +super+ if not.
+    # @since 0.2.0
     def method_missing(method_name, *args, &block)
       field_type = parse_field_method(method_name)
       field_type ? field(field_type, *args, &block) : super
@@ -42,6 +43,7 @@ module EditInPlace
     # {Builder}.
     # @param method_name [string] the name of the missing method being checked.
     # @return true if the method name can be responded to by this {Builder}; false otherwise.
+    # @since 0.2.0
     def respond_to_missing?(method_name, priv = false)
       parse_field_method(method_name) || super
     end
