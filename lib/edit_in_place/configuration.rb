@@ -27,11 +27,17 @@ module EditInPlace
     # @return [Array] the array of defined middlewares.
     attr_accessor :defined_middlewares
 
+    # The {MiddlewareRegistrar} used to store the list of registered middlewares.
+    # @return [MiddlewareRegistrar] the {MiddlewareRegistrar} that stores the list of registered
+    #   middlewares.
+    attr_accessor :registered_middlewares
+
     # Creates a new, default instance of {Configuration}.
     def initialize
       @field_types = FieldTypeRegistrar.new
       @field_options = FieldOptions.new(mode: DEFAULT_MODE)
       @defined_middlewares = []
+      @registered_middlewares = MiddlewareRegistrar.new
     end
 
     # Creates a deep copy of this {Configuration} that can be safely modified.
@@ -42,6 +48,7 @@ module EditInPlace
       c.field_options = field_options.dup
       # Note that this is purposely NOT a deep copy---it doesn't make sense to duplicate classes.
       c.defined_middlewares = defined_middlewares.dup
+      c.registered_middlewares = registered_middlewares.dup
       c
     end
   end
