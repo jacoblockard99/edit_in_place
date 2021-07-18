@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'active_support/core_ext/object/deep_dup'
+
+# frozen_string_literal: true
+
 module EditInPlace
   # {Configuration} is a class that is capable of storing configuration for an edit_in_place
   # {Builder}. Essentially all the options provided by edit_in_place reside in this class for

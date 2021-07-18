@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require 'spec_helper'
 require 'support/test_extended_builder'
 require 'support/another_extended_builder'
 
@@ -19,5 +19,10 @@ RSpec.describe EditInPlace::ExtendedBuilder do
 
   it 'responds to methods on the actual builder' do
     expect(extended_again).to respond_to :another_extension
+  end
+
+  it 'allows the use of methods from the base builder' do
+    actual = extended_again.field(TestFieldType.new('input'), 'arg')
+    expect(actual).to eq 'Init: input, After: arg'
   end
 end
