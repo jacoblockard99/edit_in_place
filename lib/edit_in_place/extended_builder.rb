@@ -41,6 +41,7 @@ module EditInPlace
     # @yield the block passed to the missing method.
     # @return the result of calling the method on the base builder, if it was defined, or the
     #   result of calling +super+ if not.
+    # @since 0.2.0
     def method_missing(method_name, *args, &block)
       base.respond_to?(method_name) ? base.send(method_name, *args, &block) : super
     end
@@ -48,6 +49,7 @@ module EditInPlace
     # Overrides +respond_to_missing?+ to respond to methods defined on the base builder.
     # @param method_name [String] the name of the missing method.
     # @return [Boolean] whether this {ExtendedBuilder} can respond to the given method name.
+    # @since 0.2.0
     def respond_to_missing?(method_name, priv = false)
       base.respond_to?(method_name) || super
     end

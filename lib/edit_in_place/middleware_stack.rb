@@ -55,7 +55,7 @@ module EditInPlace
       end
     end
 
-    # Attempts to find a middleare registered with the given name in the middleare registrar. If
+    # Attempts to find a middleware registered with the given name in the middleare registrar. If
     # one could not be found, raises an appropriate error.
     # @param name [Symbol] the name to search for.
     # @return the found middleware.
