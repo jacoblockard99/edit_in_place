@@ -17,7 +17,7 @@ module EditInPlace
     # Creates a deep copy of this {Registrar} that can be safely modified.
     # @return [Registrar] a deep copy of this registrar.
     def dup
-      r = Registrar.new
+      r = self.class.new
       r.register_all(all)
       r
     end

@@ -6,6 +6,14 @@ require 'support/test_field_type'
 RSpec.describe EditInPlace::FieldTypeRegistrar do
   let(:registrar) { described_class.new }
 
+  describe '#dup' do
+    let(:dup) { registrar.dup }
+
+    it 'returns a new FieldTypeRegistrar' do
+      expect(dup).to be_an_instance_of described_class
+    end
+  end
+
   describe '#register' do
     context 'with a non-FieldType field type' do
       def register
