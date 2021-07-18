@@ -78,7 +78,9 @@ module EditInPlace
       inject_field_options!(args)
       args[0] = config.field_options.merge(args[0])
 
-      stack = MiddlewareStack.new(config.defined_middlewares, args[0].middlewares)
+      stack = MiddlewareStack.new(config.defined_middlewares,
+                                  args[0].middlewares,
+                                  config.registered_middlewares)
       args = stack.call(*args)
 
       type = evaluate_field_type(type)

@@ -4,7 +4,7 @@ require 'middlegem'
 
 module EditInPlace
   # {MiddlewareStack} is a class that is capable of applying the given array of middlewares to
-  # a list of input arguments, given an array of defined middlewares. It uses +middlegem+.
+  # a list of input arguments, given an array of defined middleware classes. It uses +middlegem+.
   #
   # @author Jacob Lockard
   # @since 0.2.0
@@ -17,13 +17,20 @@ module EditInPlace
     # @return [Array] the middlewares.
     attr_reader :middlewares
 
-    # Creates a new instance of {MiddlewareStack} with the given defined middleware classes and
-    # list of middlewares.
+    # The {MiddlewareRegistrar} used to look up middleware registrations.
+    # @return [MiddlewareRegistrar] the middleware registrar.
+    attr_reader :registrar
+
+    # Creates a new instance of {MiddlewareStack} with the given defined middleware classes,
+    # list of middlewares, and middleware registrar.
     # @param defined_middlewares [Array] the array of defined middleware classes.
     # @param middlewares [Array] the array of middlewares to apply.
-    def initialize(defined_middlewares, middlewares)
+    # @param registrar [MiddlewareRegistrar] the {MiddlewareRegistrar] used to look up middleware
+    #   registrations.
+    def initialize(defined_middlewares, middlewares, registrar)
       @defined_middlewares = defined_middlewares
-      @middlewares = middlewares
+      @registrar = registrar
+      @middlewares = lookup_middlewares(middlewares)
     end
 
     # Applies the list of middlewares to the given input arguments.
@@ -33,6 +40,27 @@ module EditInPlace
       definition = Middlegem::ArrayDefinition.new(defined_middlewares)
       stack = Middlegem::Stack.new(definition, middlewares: middlewares)
       stack.call(*args)
+    end
+
+    private
+
+    # Iterates over the given middlewares and converts symbol names to their associated
+    # registered middleware objects if possible.
+    # @param middlewares [Array] the middlewares to iterate over.
+    # @return [Array] the changed middlewares.
+    def lookup_middlewares(middlewares)
+      middlewares.map { |m| m.is_a?(Symbol) ? lookup_middleware(m) : m }
+    end
+
+    # Attempts to find a middleare registered with the given name in the middleare registrar. If
+    # one could not be found, raises an appropriate error.
+    # @param name [Symbol] the name to search for.
+    # @return the found middleware.
+    def lookup_middleware(name)
+      result = registrar.find(name)
+      raise UnregisteredMiddlewareError, name if result.nil?
+
+      result
     end
   end
 end

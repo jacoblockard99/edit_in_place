@@ -70,5 +70,6 @@ end
 
 require 'edit_in_place/invalid_field_type_error'
 require 'edit_in_place/unregistered_field_type_error'
+require 'edit_in_place/unregistered_middleware_error'
 require 'edit_in_place/invalid_registration_name_error'
 require 'edit_in_place/duplicate_registration_error'

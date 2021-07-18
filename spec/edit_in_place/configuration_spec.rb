@@ -41,9 +41,9 @@ RSpec.describe EditInPlace::Configuration do
       })
       config.defined_middlewares = [TestMiddleware.new]
       config.registered_middlewares.register_all({
-        one: proc { },
-        two: proc { },
-        three: proc { }
+        one: proc {},
+        two: proc {},
+        three: proc {}
       })
     end
 
@@ -96,7 +96,7 @@ RSpec.describe EditInPlace::Configuration do
     end
 
     it 'has a MiddlewareRegistrar that can be safely modified' do
-      dup.registered_middlewares.register(:new, proc { })
+      dup.registered_middlewares.register(:new, proc {})
       expect(config.registered_middlewares.find(:new)).to be_nil
     end
   end
