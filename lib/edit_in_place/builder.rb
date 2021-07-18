@@ -115,8 +115,6 @@ module EditInPlace
 
       yield scoped_builder
     end
-    # @since 0.2.0
-    alias scope scoped
 
     # Yields a new, scoped {Builder} with the given middlewares merged into the current ones.
     # Note that this method is for convenience only and is exactly equivalent to calling
