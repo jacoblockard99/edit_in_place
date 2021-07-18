@@ -26,6 +26,10 @@ RSpec.describe EditInPlace::Configuration do
     it 'sets up an empty defined middlewares array' do
       expect(config.defined_middlewares).to eq []
     end
+
+    it 'sets up a blank MiddlewareRegistrar' do
+      expect(config.registered_middlewares.all).to be_empty
+    end
   end
 
   describe '#dup' do
@@ -36,6 +40,11 @@ RSpec.describe EditInPlace::Configuration do
         bool: TestFieldType.new('bool field')
       })
       config.defined_middlewares = [TestMiddleware.new]
+      config.registered_middlewares.register_all({
+        one: proc { },
+        two: proc { },
+        three: proc { }
+      })
     end
 
     let(:dup) { config.dup }
@@ -56,6 +65,11 @@ RSpec.describe EditInPlace::Configuration do
       expect(dup.defined_middlewares.object_id).not_to eq config.defined_middlewares.object_id
     end
 
+    it 'duplicates the MiddlewareRegistrar' do
+      actual = dup.registered_middlewares.object_id
+      expect(actual).not_to eq config.registered_middlewares.object_id
+    end
+
     it 'performs a deep copy of the FieldTypeRegistrar' do
       actual = dup.field_types.find(:text).object_id
       expect(actual).not_to eq config.field_types.find(:text).object_id
@@ -66,6 +80,11 @@ RSpec.describe EditInPlace::Configuration do
       expect(actual).to eq config.defined_middlewares[0].object_id
     end
 
+    it 'performs a deep copy of the MiddlewareRegistrar' do
+      actual = dup.registered_middlewares.find(:one).object_id
+      expect(actual).not_to eq config.registered_middlewares.find(:one).object_id
+    end
+
     it 'has a FieldTypeRegistrar that can be safely modified' do
       dup.field_types.register(:new, TestFieldType.new('NEW'))
       expect(config.field_types.find(:new)).to be_nil
@@ -74,6 +93,11 @@ RSpec.describe EditInPlace::Configuration do
     it 'has a defined middlewares array that can be safely modified' do
       dup.defined_middlewares << TestMiddleware.new
       expect(config.defined_middlewares.count).to eq 1
+    end
+
+    it 'has a MiddlewareRegistrar that can be safely modified' do
+      dup.registered_middlewares.register(:new, proc { })
+      expect(config.registered_middlewares.find(:new)).to be_nil
     end
   end
 end
