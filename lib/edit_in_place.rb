@@ -10,6 +10,7 @@ require 'edit_in_place/field_type'
 require 'edit_in_place/field_type_registrar'
 require 'edit_in_place/middleware_stack'
 require 'edit_in_place/middleware_registrar'
+require 'edit_in_place/middleware_parser'
 
 # {EditInPlace} is a namespace that contains all the modules and classes of the edit_in_place
 # Rails gemified plugin.
