@@ -27,7 +27,7 @@ module EditInPlace
     end
 
     # Applies the list of middlewares to the given input arguments.
-    # @input [Array] the argument list to transform.
+    # @param args [Array] the argument list to transform.
     # @return [Array] the transformed argument list.
     def call(*args)
       definition = Middlegem::ArrayDefinition.new(defined_middlewares)
