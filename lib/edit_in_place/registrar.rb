@@ -59,7 +59,7 @@ module EditInPlace
     # internal one and can be safely modified.
     # @return [Hash<(Symbol, Object)>] the hash of registered names and objects.
     def all
-      registrations.deep_dup
+      registrations.transform_values { |r| r.instance_of?(Class) ? r : r.deep_dup }
     end
 
     protected

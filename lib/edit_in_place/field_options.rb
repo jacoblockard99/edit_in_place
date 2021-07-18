@@ -51,7 +51,7 @@ module EditInPlace
       f = FieldOptions.new
       f.mode = mode
       f.view = view
-      f.middlewares = middlewares.deep_dup
+      f.middlewares = middlewares.map { |m| m.instance_of?(Class) ? m : m.dup }
       f
     end
 

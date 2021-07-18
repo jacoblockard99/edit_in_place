@@ -72,7 +72,7 @@ RSpec.describe EditInPlace::FieldOptions do
       described_class.new(
         mode: :random,
         view: 'random view object',
-        middlewares: [:random, TestMiddleware.new]
+        middlewares: [:random, TestMiddleware.new, TestMiddleware]
       )
     end
 
@@ -91,7 +91,7 @@ RSpec.describe EditInPlace::FieldOptions do
     end
 
     it 'copies the middlewares' do
-      expect(dup.middlewares.count).to eq 2
+      expect(dup.middlewares.count).to eq 3
     end
 
     it 'duplicates the middlewares' do
@@ -100,6 +100,10 @@ RSpec.describe EditInPlace::FieldOptions do
 
     it 'performs a deep duplication of the middlewares' do
       expect(dup.middlewares[1].object_id).not_to eq field_options.middlewares[1].object_id
+    end
+
+    it 'does not duplicate middleware classes' do
+      expect(dup.middlewares[2].object_id).to eq field_options.middlewares[2].object_id
     end
   end
 

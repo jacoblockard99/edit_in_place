@@ -165,14 +165,15 @@ RSpec.describe EditInPlace::Registrar do
     before do
       registrar.register_all({
         one: TestObject.new('ONE', { one: 'One', two: 'Two' }),
-        two: TestObject.new('TWO')
+        two: TestObject.new('TWO'),
+        three: MiddlewareThree
       })
     end
 
     let(:all) { registrar.all }
 
     it 'returns the correct number of registrations' do
-      expect(all.count).to eq 2
+      expect(all.count).to eq 3
     end
 
     it 'includes the first registered' do
@@ -189,6 +190,10 @@ RSpec.describe EditInPlace::Registrar do
 
     it 'duplicates the second registration' do
       expect(all[:two].object_id).not_to eq registrar.find(:two).object_id
+    end
+
+    it 'does not duplicate classes' do
+      expect(all[:three].object_id).to eq registrar.find(:three).object_id
     end
 
     it 'performs a deep copy of the registrations' do
