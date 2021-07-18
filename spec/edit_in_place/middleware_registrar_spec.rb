@@ -24,7 +24,7 @@ RSpec.describe EditInPlace::MiddlewareRegistrar do
     context 'with a middleware class' do
       before { registrar.register :one, MiddlewareOne }
 
-      it 'registeres it' do
+      it 'registers it' do
         expect(registrar.find(:one)).to eq MiddlewareOne
       end
     end
