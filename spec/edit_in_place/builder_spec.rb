@@ -121,6 +121,12 @@ RSpec.describe EditInPlace::Builder do
       end
     end
 
+    context 'with a valid field type class' do
+      it 'renders correctly' do
+        expect(builder.field(ComplexTestFieldType, 'input', '%')).to eq '% input %'
+      end
+    end
+
     context 'with a field options hash' do
       it 'respects it' do
         actual = builder.field(TestFieldType.new('Test'), { mode: :editing }, 'Here')
