@@ -37,6 +37,14 @@ RSpec.describe EditInPlace::FieldTypeRegistrar do
         expect(registrar.find(:text).arg).to eq 'TEXT'
       end
     end
+
+    context 'with a field type class' do
+      before { registrar.register :complex, ComplexTestFieldType }
+
+      it 'registers it' do
+        expect(registrar.find(:complex)).to eq ComplexTestFieldType
+      end
+    end
   end
 
   describe '#register_all' do

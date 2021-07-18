@@ -193,16 +193,27 @@ module EditInPlace
     # @return [FieldType] an appropriate {FieldType} instance for the given input.
     def evaluate_field_type(type)
       case type
+      when Symbol
+        evaluate_field_type(lookup_field_type(type))
+      when Class
+        type.new
       when FieldType
         type
-      when Symbol
-        result = config.field_types.find(type)
-        raise UnregisteredFieldTypeError, type if result.nil?
-
-        result
       else
         raise InvalidFieldTypeError, type
       end
+    end
+
+    # Attempts to find a field type registered with the given name in the field type registrar.
+    # If one could not be found, raises an appropriate error.
+    # @param name [Symbol] the name to search for.
+    # @return the found field type.
+    # @since 0.2.0
+    def lookup_field_type(name)
+      result = config.field_types.find(name)
+      raise UnregisteredFieldTypeError, name if result.nil?
+
+      result
     end
   end
 end
