@@ -177,21 +177,21 @@ RSpec.describe EditInPlace::Builder do
         builder.config.field_types.register :text, TestFieldType.new('text')
       end
 
-      it 'should be defined' do
+      it 'is defined' do
         expect(builder).to respond_to :text_field
       end
 
-      it 'should render correctly' do
+      it 'renders correctly' do
         expect(builder.text_field('input')).to eq 'Init: text, After: input'
       end
     end
 
     context 'with unregistered field types' do
-      it 'should not be defined' do
+      it 'si not defined' do
         expect(builder).not_to respond_to :random_field
       end
 
-      it 'should raise appropriate error' do
+      it 'raises an appropriate error' do
         expect { builder.random_field('input') }.to raise_error NoMethodError
       end
     end
