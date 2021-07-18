@@ -29,12 +29,27 @@ module EditInPlace
     #   quack like a {Builder}.
     attr_reader :base
 
-    delegate_missing_to :base
-
     # Creates a new {ExtendedBuilder} with the given base builder.
     # @param base [Object] the base builder to extend. It should quack like a {Builder}.
     def initialize(base)
       @base = base
+    end
+
+    # Overrides +method_missing+ to allow the use of methods defined on the base builder.
+    # @param method_name [String] the name of the missing method.
+    # @param args [Array] the arguments given to the missing method.
+    # @yield the block passed to the missing method.
+    # @return the result of calling the method on the base builder, if it was defined, or the
+    #   result of calling +super+ if not.
+    def method_missing(method_name, *args, &block)
+      base.respond_to?(method_name) ? base.send(method_name, *args, &block) : super
+    end
+
+    # Overrides +respond_to_missing?+ to respond to methods defined on the base builder.
+    # @param method_name [String] the name of the missing method.
+    # @return [Boolean] whether this {ExtendedBuilder} can respond to the given method name.
+    def respond_to_missing?(method_name, priv = false)
+      base.respond_to?(method_name) || super
     end
   end
 end
