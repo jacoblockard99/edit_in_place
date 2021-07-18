@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- The ability to use parameterless field type classes directly.
 - The ability to use parameterless middleware classes directly.
 - Magic `*_field` methods to `Builder`.
 - `Builder#scope`, an alias for `Builder#scoped`.
@@ -13,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The ability to register and use middlewares by name.
 ### Changed
 - Removed 'rails' depedency, effectively making `edit_in_place` a plain Ruby gem.
+### Fixed
+- A bug where duplicated `FieldTypeRegistrar` and `MiddlewareTypeRegistrar` instances became `Registrar` instances.
 
 ## [0.1.0] - 2021-07-15
 ### Added
