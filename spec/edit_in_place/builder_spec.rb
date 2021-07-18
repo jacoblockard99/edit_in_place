@@ -198,4 +198,18 @@ RSpec.describe EditInPlace::Builder do
       end
     end
   end
+
+  describe '#with_middlewares' do
+    let(:middlewares) { [MiddlewareThree.new, MiddlewareOne.new] }
+    let(:scoped) do
+      scoped = nil
+      builder.with_middlewares(*middlewares) { |s| scoped = s }
+      scoped
+    end
+    let(:rendered) { scoped.field(ComplexTestFieldType.new, 'input', '&') }
+
+    it 'creates a scoped builder with the given middlewares' do
+      expect(rendered).to eq '& input*ONE*$THREE$ &'
+    end
+  end
 end
