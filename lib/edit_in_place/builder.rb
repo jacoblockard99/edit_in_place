@@ -2,9 +2,10 @@
 
 module EditInPlace
   # {Builder} is the class that provides the actual functionality to build and render editable
-  # content. This class will usually be instantiated in a controller and passed somehow to a
-  # view. The view can then use its methods to generate content. Note that when a {Builder} is
-  # created, it's {Configuration} is copied from the global configuration.
+  # content. If used in a Rails setting, this class will usually be instantiated in a controller
+  # and passed somehow to a view. The view can then use its methods to generate content. Note
+  # that when a {Builder} is created, its {Configuration} is copied from the global
+  # configuration.
   #
   # This class can be extended by utilizing {ExtendedBuilder} to safely add additional
   # functionality. This can be particularly helpful for edit_in_place extensions that would like
@@ -28,7 +29,7 @@ module EditInPlace
     # Overrides +method_missing+ to allow methods like +*_field+ to be called for registered
     # fields. For example, if a +:text+ field type has been registered, then calling
     # +Builder#text_field(...)+ is equivalent to calling +Builder#field(:text, ...)+.
-    # @param method_name [string] the name of the missing method being called.
+    # @param method_name [String] the name of the missing method being called.
     # @param args [Array] the arguments passed to the missing method.
     # @yield the block, if any, passed to the missing method.
     # @return the result of calling {#field} with the appropriate type if possible; the result of
@@ -39,16 +40,18 @@ module EditInPlace
       field_type ? field(field_type, *args, &block) : super
     end
 
-    # Overrides +respond_to_missing?+ to allow methods like +*_field+ to be respond to by
+    # Overrides +respond_to_missing?+ to allow methods like +*_field+ to be responded to by
     # {Builder}.
     # @param method_name [string] the name of the missing method being checked.
-    # @return true if the method name can be responded to by this {Builder}; false otherwise.
+    # @return [Boolean] +true+ if this {Builder} can respond to the given method name; +false+
+    #   otherwise.
+    # @see #method_missing
     # @since 0.2.0
-    def respond_to_missing?(method_name, priv = false)
+    def respond_to_missing?(method_name, inlude_private = false)
       parse_field_method(method_name) || super
     end
 
-    # Creates a deep copy of this {Builder}, whose configuration can be safely modified.
+    # Creates a deep copy of this {Builder} whose configuration can be safely modified.
     # @return [Builder] a deep copy of this {Builder}.
     def dup
       b = self.class.new
@@ -56,7 +59,7 @@ module EditInPlace
       b
     end
 
-    # Configures this {Builder} by yielding its configuration to the given block. For example,
+    # Configures this {Builder} by yielding its configuration to the given block. For example:
     #
     #   @builder = EditInPlace::Builder.new
     #   @builder.configure do |c|
@@ -64,39 +67,43 @@ module EditInPlace
     #     c.field_options.middlewares = [:one, :two]
     #   end
     #
-    # Note that this method is simply a convenience method, and the above code is exactly
+    # Note that this method is simply a convenience method and that the above code is exactly
     # equivalent to the following:
     #
     #   @builder = EditInPlace::Builder.new
     #   @builder.config.field_options.mode = :editing
     #   @builder.config.field_options.middlewares = [:one, :two]
+    #
     # @yieldparam config [Configuration] the {Configuration} instance associated with this
     #   {Builder}.
     # @yieldreturn [void]
     # @return [void]
-    # @see EditInPlace.configure
     def configure
       yield config if block_given?
     end
 
+    # Renders a single "field", that is a single piece of editable content defined by a field
+    # type. Field options may or may not be provided and will be automatically injected if not.
+    # The input given to this method will be transform by any middlewares added from various
+    # sources.
     # @overload field(type, options, *args)
-    #   Renders a single field of the given type with the given field option and arguments
-    #   to be passed to the field type renderer.
-    #   @param type [FieldType, Symbol] the type of field to render, either an actual instance of
-    #     {FieldType}, or the symbol name of a registered field type.
+    #   Renders a single field of the given type with the given field options and input.
+    #   @param type [FieldType, Class, Symbol] the type of field to render, either an actual
+    #     instance of {FieldType}, a field type class that can be instantiated with no arguments,
+    #     or the symbol name of a registered field type.
     #   @param options [FieldOptions, Hash] the field options to be used when rendering the
-    #     field. These options are defined in {FieldOptions}. Either an actual instance of
+    #     field. These options are as defined in {FieldOptions}. Either an actual instance of
     #     {FieldOptions} or a hash are acceptable.
-    #   @param args [Array] the arguments to be passed to the field renderer.
-    #   @return [String] the rendered field, as HTML.
+    #   @param args [Array] the input arguments to be passed to `FieldType#render`.
+    #   @return the rendered field.
     # @overload field(type, *args)
-    #   Renders a single field of the given type with the given arguments to be passed to the
-    #   field type renderer. The default field options (as defined in {FieldOptions}) will be
-    #   used.
-    #   @param type [FieldType, Symbol] the type of field to render, either an actual instance of
-    #     {FieldType}, or the symbol name of a registered field type.
-    #   @param args [Array] the arguments to be passed to the field renderer.
-    #   @return [String] the rendered field, as HTML.
+    #   Renders a single field of the given type with the default field options and the given
+    #   input.
+    #   @param type [FieldType, Class, Symbol] the type of field to render, either an actual
+    #     instance of {FieldType}, a field type class that can be instantiated with no arguments,
+    #     or the symbol name of a registered field type.
+    #   @param args [Array] the input arguments to be passed to `FieldType#render`.
+    #   @return the rendered field.
     def field(type, *args)
       inject_field_options!(args)
       args[0] = config.field_options.merge(args[0])
