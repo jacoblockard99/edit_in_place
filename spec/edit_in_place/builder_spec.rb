@@ -127,6 +127,16 @@ RSpec.describe EditInPlace::Builder do
       end
     end
 
+    context 'with a registered field type class' do
+      before do
+        builder.config.field_types.register(:complex, ComplexTestFieldType)
+      end
+
+      it 'renders correctly' do
+        expect(builder.complex_field('Input Data', '|')).to eq '| Input Data |'
+      end
+    end
+
     context 'with a field options hash' do
       it 'respects it' do
         actual = builder.field(TestFieldType.new('Test'), { mode: :editing }, 'Here')
