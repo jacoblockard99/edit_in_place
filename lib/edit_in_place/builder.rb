@@ -115,6 +115,8 @@ module EditInPlace
 
       yield scoped_builder
     end
+    # @since 0.2.0
+    alias scope scoped
 
     private
 
