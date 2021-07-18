@@ -8,7 +8,6 @@ require 'edit_in_place/extended_builder'
 require 'edit_in_place/field_options'
 require 'edit_in_place/field_type'
 require 'edit_in_place/field_type_registrar'
-require 'edit_in_place/middleware_stack'
 require 'edit_in_place/middleware_registrar'
 require 'edit_in_place/middleware_parser'
 
