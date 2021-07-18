@@ -78,8 +78,7 @@ module EditInPlace
       inject_field_options!(args)
       args[0] = config.field_options.merge(args[0])
 
-      definition = Middlegem::ArrayDefinition.new(config.defined_middlewares)
-      stack = Middlegem::Stack.new(definition, middlewares: args[0].middlewares)
+      stack = MiddlewareStack.new(config.defined_middlewares, args[0].middlewares)
       args = stack.call(*args)
 
       type = evaluate_field_type(type)
