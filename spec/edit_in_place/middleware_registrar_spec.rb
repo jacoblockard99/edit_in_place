@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe EditInPlace::MiddlewareRegistrar do
   let(:registrar) { described_class.new }
 

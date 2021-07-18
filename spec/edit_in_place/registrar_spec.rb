@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require 'support/test_object'
 
 RSpec.describe EditInPlace::Registrar do

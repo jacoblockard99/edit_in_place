@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require 'support/test_extended_builder'
 require 'support/another_extended_builder'
 
