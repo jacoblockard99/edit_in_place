@@ -9,7 +9,7 @@ module EditInPlace
   # @author Jacob Lockard
   # @since 0.1.0
   class FieldType
-    # Render the field, given a {FieldOptions} instance and an array of arguments passed by
+    # Render the field, given the mode and an array of arguments passed by
     # the caller.
     #
     # While subclasses may override this method as appropriate, the default
@@ -18,13 +18,12 @@ module EditInPlace
     # 2. calls a +render_*+ method.
     # For example, if the mode were +:admin_editing+, then a +render_admin_editing+ method would
     # be called. Naturally, the +render_*+ methods need to be defined by the subclass.
-    # @param options [FieldOptions] options passed by the {Builder} instance that should
-    #   be used to render the field.
+    # @param mode [Symbol] the mode with which to render the field.
     # @param args [Array<Object>] the arguments passed by the field creator.
-    # @return [String] the rendered HTML.
-    def render(options, *args)
-      validate_mode!(options.mode)
-      send("render_#{options.mode}", options, *args)
+    # @return the rendered result.
+    def render(mode, *args)
+      validate_mode!(mode)
+      send("render_#{mode}", mode, *args)
     end
 
     # Gets the modes that are supported by this field type, +:viewing+ and +:editing+ by default.

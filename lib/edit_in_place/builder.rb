@@ -105,11 +105,11 @@ module EditInPlace
     #   @param args [Array] the input arguments to be passed to `FieldType#render`.
     #   @return the rendered field.
     def field(type, *args)
-      inject_field_options!(args)
-      args[0] = config.field_options.merge(args[0])
+      options = config.field_options.merge(get_field_options!(args))
+      args.unshift(options.mode)
 
       stack = MiddlewareStack.new(config.defined_middlewares,
-                                  args[0].middlewares,
+                                  options.middlewares,
                                   config.registered_middlewares)
       args = stack.call(*args)
 
@@ -171,24 +171,18 @@ module EditInPlace
       config.field_types.find(field_type_name)
     end
 
-    # Ensures that the first argument in the given list of arguments is a valid, appropriate
-    # {FieldOptions} instance for the list of arguments. In particular:
-    # - When the first argument is already an instance of {FieldOptions}, the argument list
-    #   is not touched.
-    # - When the first argument is a hash, then it is converted to a
-    #   {FieldOptions} instance.
-    # - Otherwise, the default {FieldOptions} instance is prepended to the argument list.
-    # @param args [Array] the raw arguments into which to inject the field options.
+    # Gets an appropriate `FieldOptions` instance for the given list of field arguments and
+    # removes any present field options from the argument list.
+    # @param args [Array] the raw arguments from which to get the field options.
     # @return [void]
-    def inject_field_options!(args)
-      options = args.first
-
-      return if options.is_a? FieldOptions
-
-      if options.is_a? Hash
-        args[0] = FieldOptions.new(options)
+    def get_field_options!(args)
+      case args.first
+      when FieldOptions
+        args.shift
+      when Hash
+        FieldOptions.new(args.shift)
       else
-        args.unshift(FieldOptions.new)
+        FieldOptions.new
       end
     end
 
