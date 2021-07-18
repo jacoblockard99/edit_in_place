@@ -13,7 +13,9 @@ module EditInPlace
     # middleware objects (as defined by +Middlegem::Middleware.valid?+) can be registered.
     def validate_registration!(name, middleware)
       super
-      raise Middlegem::InvalidMiddlewareError unless Middlegem::Middleware.valid?(middleware)
+      unless Middlegem::Middleware.valid?(middleware) || middleware.instance_of?(Class)
+        raise Middlegem::InvalidMiddlewareError
+      end
     end
   end
 end

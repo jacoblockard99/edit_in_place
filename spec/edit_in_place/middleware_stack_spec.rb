@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'support/middleware_one'
 
 RSpec.describe EditInPlace::MiddlewareStack do
-  let(:defined) { [Proc] }
+  let(:defined) { [Proc, MiddlewareOne] }
   let(:registrar) { EditInPlace::MiddlewareRegistrar.new }
   let(:stack) { described_class.new(defined, middlewares, registrar) }
 
@@ -40,6 +41,14 @@ RSpec.describe EditInPlace::MiddlewareStack do
 
       it 'raises an appropriate error' do
         expect { stack.call('input') }.to raise_error EditInPlace::UnregisteredMiddlewareError
+      end
+    end
+
+    context 'with a middleware class' do
+      let(:middlewares) { [MiddlewareOne] }
+
+      it 'transforms the input correctly' do
+        expect(stack.call('options', 'input')).to eq ['options', 'input*ONE*']
       end
     end
   end

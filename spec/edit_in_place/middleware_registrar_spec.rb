@@ -21,6 +21,14 @@ RSpec.describe EditInPlace::MiddlewareRegistrar do
       end
     end
 
+    context 'with a middleware class' do
+      before { registrar.register :one, MiddlewareOne }
+
+      it 'registeres it' do
+        expect(registrar.find(:one)).to eq MiddlewareOne
+      end
+    end
+
     context 'with a valid middleware object' do
       before { registrar.register :capitalize, ->(input) { input.upcase } }
 
