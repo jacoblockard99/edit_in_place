@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Builder#scope`, an alias for `Builder#scoped`.
 - `Builder#with_middlewares` to easily allow scoping a builder with middlewares.
 - The ability to register and use middlewares by name.
+### Changed
+- Removed 'rails' depedency, effectively making `edit_in_place` a plain Ruby gem.
 
 ## [0.1.0] - 2021-07-15
 ### Added
