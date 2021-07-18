@@ -4,7 +4,7 @@
 module Helpers
   def ignore
     yield
-  rescue EditInPlace::Error
+  rescue EditInPlace::Error, Middlegem::Error
   end
 end
 # rubocop:enable Lint/SuppressedException
