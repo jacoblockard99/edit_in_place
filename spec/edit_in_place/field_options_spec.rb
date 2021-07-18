@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
 require 'edit_in_place'
 require 'support/test_middleware'
 
