@@ -8,7 +8,7 @@ module EditInPlace
   # configuration.
   #
   # This class can be extended by utilizing {ExtendedBuilder} to safely add additional
-  # functionality. This can be particularly helpful for edit_in_place extensions that would like
+  # functionality. This can be particularly helpful for edit_in_place extensions that wish
   # to add other content generation methods without requiring the user to yield another builder
   # to the view.
   #
@@ -29,7 +29,7 @@ module EditInPlace
     # Overrides +method_missing+ to allow methods like +*_field+ to be called for registered
     # fields. For example, if a +:text+ field type has been registered, then calling
     # +Builder#text_field(...)+ is equivalent to calling +Builder#field(:text, ...)+.
-    # @param method_name [String] the name of the missing method being called.
+    # @param method_name [Symbol, String] the name of the missing method being called.
     # @param args [Array] the arguments passed to the missing method.
     # @yield the block, if any, passed to the missing method.
     # @return the result of calling {#field} with the appropriate type if possible; the result of
@@ -42,7 +42,7 @@ module EditInPlace
 
     # Overrides +respond_to_missing?+ to allow methods like +*_field+ to be responded to by
     # {Builder}.
-    # @param method_name [string] the name of the missing method being checked.
+    # @param method_name [Symbol, String] the name of the missing method being checked.
     # @return [Boolean] +true+ if this {Builder} can respond to the given method name; +false+
     #   otherwise.
     # @see #method_missing
@@ -82,9 +82,9 @@ module EditInPlace
       yield config if block_given?
     end
 
-    # Renders a single "field", that is a single piece of editable content defined by a field
+    # Renders a single "field", that is, a single piece of editable content defined by a field
     # type. Field options may or may not be provided and will be automatically injected if not.
-    # The input given to this method will be transform by any middlewares added from various
+    # The input given to this method will be transformed by any middlewares added from various
     # sources.
     # @overload field(type, options, *args)
     #   Renders a single field of the given type with the given field options and input.
