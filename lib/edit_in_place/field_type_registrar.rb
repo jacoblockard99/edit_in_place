@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'edit_in_place/registrar'
+
 module EditInPlace
   # {FieldTypeRegistrar} is a subcalss of {Registrar} that only allows {FieldType}
   # instances to be registered.
