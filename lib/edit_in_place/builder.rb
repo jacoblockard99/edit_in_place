@@ -221,13 +221,21 @@ module EditInPlace
     # @param middlewares [Array] the array of middlewares to apply.
     # @param args [Array] the array of input arguments.
     # @return [Array] the resulting argument list.
+    # @since 0.2.0
     def apply_middlewares(middlewares, *args)
-      definition = Middlegem::ArrayDefinition.new(config.defined_middlewares)
-      parser = MiddlewareParser.new(config.registered_middlewares)
-      middlewares = parser.parse(middlewares)
-      stack = Middlegem::Stack.new(definition, middlewares: middlewares)
+      definition = ArrayDefinition.new(config.defined_middlewares)
+      stack = Middlegem::Stack.new(definition, middlewares: wrap_middlewares(middlewares))
 
       stack.call(*args)
+    end
+
+    # Converts each of the given middleware instances into a {MiddlewareWrapper} and returns the
+    # result.
+    # @param middlewares [Array] the middlewares to wrap.
+    # @return [Array] the wrapped middlewares
+    # @since 0.2.0
+    def wrap_middlewares(middlewares)
+      middlewares.map { |m| MiddlewareWrapper.new(m, config.registered_middlewares) }
     end
   end
 end
