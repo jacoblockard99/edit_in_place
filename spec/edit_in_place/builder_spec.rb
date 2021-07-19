@@ -73,16 +73,16 @@ RSpec.describe EditInPlace::Builder do
     context 'when the configuration is changed' do
       before do
         builder.configure do |c|
-          c.field_options.view = 'some view object'
+          c.field_options.middlewares = [:random]
         end
       end
 
       it 'changes it' do
-        expect(builder.config.field_options.view).to eq 'some view object'
+        expect(builder.config.field_options.middlewares).to eq [:random]
       end
 
       it 'does not change the global configuration' do
-        expect(EditInPlace.config.field_options.view).to be_nil
+        expect(EditInPlace.config.field_options.middlewares).to be_empty
       end
     end
   end

@@ -10,10 +10,6 @@ RSpec.describe EditInPlace::Configuration do
       expect(config.field_types.all).to be_empty
     end
 
-    it 'sets up a FieldOptions with a nil view context' do
-      expect(config.field_options.view).to be_nil
-    end
-
     it 'sets up a FieldOptions with the default mode' do
       expect(config.field_options.mode).to eq described_class::DEFAULT_MODE
     end
