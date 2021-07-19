@@ -6,7 +6,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/389fc591cd9cccb2ceb1/maintainability)](https://codeclimate.com/github/jacoblockard99/edit_in_place/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/389fc591cd9cccb2ceb1/test_coverage)](https://codeclimate.com/github/jacoblockard99/edit_in_place/test_coverage)
 
-`edit_in_place` is a Rails plugin that facilitates the creation of user interfaces that allow the user to edit content "in place" in a natural way. `edit_in_place` aims to be:
+`edit_in_place` is a Ruby gem that facilitates the creation of user interfaces that allow the user to edit content "in place" in a natural way. `edit_in_place` aims to be:
   - **Flexible.** Everything has been designed with extensibility in mind. The `edit_in_place` core (this repository) can be extended for a huge variety of use cases.
   - **Reliable.** Every aspect of the plugin is thoroughly tested and documented.
   - **Natural.** Coding with `edit_in_place` is just as natural as editing content with it is! We think you'll really enjoy working with the `edit_in_place` API.
@@ -35,7 +35,7 @@ Or you may install it manually with:
 $ gem install edit_in_place
 ```
 
-`edit_in_place` currently has two dependencies: `rails` and `middlegem`.
+`edit_in_place` currently has two dependencies: `activesupport` and `middlegem`. The only extension required from `activesupport` is `Hash#deep_merge`.
 
 ## Concepts
 
@@ -66,12 +66,12 @@ Here are a few examples:
 class TextFieldType < EditInPlace::FieldType
   protected
 
-  def render_viewing(options, name, value)
-    options.view.tag.p value
+  def render_viewing(mode, name, value)
+    "<p>#{value}</p>"
   end
 
-  def render_editing(options, name, value)
-    options.view.text_field_tag name, value
+  def render_editing(mode, name, value)
+    "<input type='text' value='#{value}' name='#{name]' />"
   end
 end
 ```
@@ -80,13 +80,13 @@ end
 # boolean_field_type.rb
 
 class DummyFieldtype < EditInPlace::FieldType
-  def render(options, *)
-    "You are currently #{options.mode} the webpage!"
+  def render(mode, *)
+    "You are currently #{mode} the webpage!"
   end
 end
 ```
 
-Notice that the `render` method is passed an options parameter, which is an instance of `EditInPlace::FieldOptions`, that contains the view context and the mode. Also note how `render_viewing` and `render_editing` will be called according to the current mode. If you want to define a `render_*` method for a different mode, you'll need to override the `supported_modes` method, like so:
+Notice that the `render` method is passed a mode parameter. Also note how `render_viewing` and `render_editing` will be called according to the current mode. If you want to define a `render_*` method for a different mode, you'll need to override the `supported_modes` method, like so:
 
 ```ruby
 class LockedField
@@ -110,7 +110,7 @@ class LockedField
 end
 ```
 
-Attempts to call `render` with a mode that is not is `supported_modes` will result in an `EditInPlace::UnsupportedModeError`, even if the field type has a corresponding `render_*` method.
+Attempts to call `render` with a mode that is not in `supported_modes` will result in an `EditInPlace::UnsupportedModeError`, even if the field type has a corresponding `render_*` method.
 
 As mentioned earlier, one of the aims of `edit_in_place` is to be natural for the developer. Thus, in the interests of convenience, `edit_in_place` allows you to "register" field types with a name, making them easier to use. We might register our "text" field type, for example, like this:
 
@@ -134,6 +134,25 @@ Becomes:
 
 Note that field type names must be symbols—strings are not allowed. Also note that duplicate registrations are not alowed and will raise an `EditInPlace::DuplicateRegistrationError`.
 
+Another convenient feature is that you may use or register field type _classes_ whose
+constructor has no parameters. For example:
+
+```ruby
+@builder.config.field_types.register :image, ImageFieldType
+```
+
+```ruby
+<%= @builder.field TextFieldType, 'contact_name', 'Jacob' %>
+<%= @builder.field :image, 'contact_name', 'Jacob' %>
+```
+
+Equivalent to:
+
+```ruby
+<%= @builder.field TextFieldType.new, 'contact_name', 'Jacob' %>
+<%= @builder.field ImageFieldType.new, 'contact_name', 'Jacob' %>
+```
+
 ### Configuring a Builder
 
 The next step is creating and using an `EditInPlace::Builder` instance. A builder always has an `EditInPlace::Configuration` instance that contains all its options and context. When a builder is first instantiated, its configuration is copied from the global `EditInPlace` configuration. Thus, you can set any global configuration options using `EditInPlace.config` or `EditInPlace.configure`, and all builders with use those options by default. For example:
@@ -152,27 +171,6 @@ This would make editing the *default* mode. Then, you can modify builder-specifi
 ```
 
 Both `EditInPlace.config` and `Builder#config` are `EditInPlace::Configuration` instances, so you configure them identically. You are encouraged to check out the [docs](https://rubydoc.info/github/jacoblockard99/edit_in_place/EditInPlace/Configuration) on `Configuration` to see all the available configuration options.
-
-Only two options are really critical to using the builder: the view context and the mode. The view context is necessary when the field type needs access to a view context to render the field. In our `TextFieldType` example above, for example, the `text_field_tag` method was required. Probably the easiest way to pass the view context is to simply use the `view_context` method in Rails controllers. For example:
-
-```
-class SomeController
-  def index
-    @builder = Builder.new
-    @builder.field_options.view = view_context
-  end
-end
-```
-
-Now, field types will automatically have access to the view context. This method has some pitfalls, however, most importantly that `view_context` returns a _new_ view context, not the one used in the actual view. If you must have the actual view context object, something like this could be done instead:
-
-```erb
-<% @builder.field_options.view = self %>
-
-<%= @builder.field :text, "hello, world" %>
-```
-
-Of course, you would need to put this at the top of all your views.
 
 There are a few approaches to managing builder modes. One approach is to have a seperate controller for each, like so:
 
@@ -221,6 +219,12 @@ If your field type happens to expect the first input argument to be a hash, you 
 <%= @builder.field :some_type, {}, { option: true }, 'etc' %>
 ```
 
+`Builder` also overrides `method_missing` to make it easier to call registered fields. If, for example, you have registered a `:text` field type, you can do the following:
+
+```erb
+<%= @builder.text_field 'phone_number', '(123) 456-7890' %>
+```
+
 ### Middlewares
 
 Perhaps the most powerful feature of `edit_in_place` are the field middlewares. `edit_in_place` uses [`middlegem`](https://github/jacoblockard99/middlegem) for middlewares, which you may want to briefly review. Field middlewares allow the inputs to a field to be transformed before actually making it to the field type's `render` method. The use cases for this are limitless.
@@ -255,6 +259,16 @@ end
 
 Now, when viewing the site, the first one would show "(5000)" and the second would show "(a string)". Note that middlewares are often too verbose to be easily used like this. They are really best used by edit_in_place extensions.
 
+Like field types, middlewares can also be registered, using `Configuration#registered_middlewares`. For example:
+
+```ruby
+@builder = Builder.new
+@builder.configure do |c|
+  c.registered_middlewares.register :parentheses, ParenthesesMiddleware
+  c.field_options.middlewares << :parentheses
+```
+
+
 ### Scoped Builders
 
 There will likely be times when you wish for many fields to have the same `FieldOptions`. This can be accomplished with the `Builder#scoped` method, which allows field options to be shared across a block. For example:
@@ -265,7 +279,15 @@ There will likely be times when you wish for many fields to have the same `Field
 <% end %>
 ```
 
-Now any fields generated with the scoped `b` builder will have an `'example'` argument appended to their input (assuming that `AppendArgumentMiddleware` has been defined).
+Now any fields generated with the scoped `b` builder will have an `'example'` argument appended to their input (assuming that `AppendArgumentMiddleware` has been defined). In fact, scoping a builder with middleware is comon enough that `Builder` also provides a `with_middlewares` convenience method:
+
+```erb
+<%= @builder.with_middlewares AppendArgumentMiddleware.new('example') |b| do %>
+  <%= b.field :text, 'name', 'value' %>
+<% end %>
+```
+
+Note that `Builder#scope` and `Builder#middleware_scope` are aliases for `Builder#scoped` and `Builder#with_middlewares`, respectively.
 
 ### Extending Builder
 

@@ -13,7 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Builder#with_middlewares` to easily allow scoping a builder with middlewares.
 - The ability to register and use middlewares by name.
 ### Changed
+- Changed `Builder#field` to pass the mode, not the field options, as the first argument. `FieldOptions` now represents options specifically for the `Builder#field` method.
 - Removed 'rails' depedency, effectively making `edit_in_place` a plain Ruby gem.
+### Removed
+- Removed the view context from `FieldOptions`. Applications are now in charge themselves of managing the view context.
 ### Fixed
 - A bug where duplicated `FieldTypeRegistrar` and `MiddlewareTypeRegistrar` instances became `Registrar` instances.
 
