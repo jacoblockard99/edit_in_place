@@ -16,10 +16,6 @@ RSpec.describe EditInPlace::FieldOptions do
         expect(field_options.mode).to eq :example
       end
 
-      it 'sets the view' do
-        expect(field_options.view).to eq 'random object'
-      end
-
       it 'sets the middlewares' do
         expect(field_options.middlewares).to eq [:random]
       end
@@ -81,10 +77,6 @@ RSpec.describe EditInPlace::FieldOptions do
       expect(dup.object_id).not_to eq field_options.object_id
     end
 
-    it 'does not duplicate the view context' do
-      expect(dup.view.object_id).to eq field_options.view.object_id
-    end
-
     it 'copies the mode' do
       expect(dup.mode).to eq :random
     end
@@ -108,24 +100,6 @@ RSpec.describe EditInPlace::FieldOptions do
 
   describe '#merge!' do
     before { field_options.merge!(other) }
-
-    context 'when both instances contain a view context' do
-      let(:field_options) { described_class.new(view: 'old view') }
-      let(:other) { described_class.new(view: 'new view') }
-
-      it 'overwrites this instance' do
-        expect(field_options.view).to eq 'new view'
-      end
-    end
-
-    context 'when the other instance does not contain a view context' do
-      let(:field_options) { described_class.new(view: 'old view') }
-      let(:other) { described_class.new }
-
-      it 'keeps the old view' do
-        expect(field_options.view).to eq 'old view'
-      end
-    end
 
     context 'when both instances contain a mode' do
       let(:field_options) { described_class.new(mode: :old) }
@@ -170,10 +144,6 @@ RSpec.describe EditInPlace::FieldOptions do
       expect(merged.mode).to eq :new
     end
 
-    it 'merges the view' do
-      expect(merged.view).to eq 'new view'
-    end
-
     it 'merges the middlewares' do
       expect(merged.middlewares).to match_array %i[one two three four]
     end
@@ -184,10 +154,6 @@ RSpec.describe EditInPlace::FieldOptions do
 
     it 'does not change the original mode' do
       expect(field_options.mode).to eq :old
-    end
-
-    it 'does not change the original view' do
-      expect(field_options.view).to eq 'old view'
     end
 
     it 'does not change the original middlewares' do

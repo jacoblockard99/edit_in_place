@@ -18,11 +18,6 @@ module EditInPlace
     #   @return [void]
     attr_reader :mode
 
-    # The view context to be used when rendering the field. This view context can be derived in
-    # a number of ways, most commonly by creating a new instance of +ActionView::Base+.
-    # @return the view context to be used when rendering the field.
-    attr_accessor :view
-
     # An array of middleware instances that should be applied to the field's input.
     # @return the array of middlewares.
     attr_accessor :middlewares
@@ -31,12 +26,11 @@ module EditInPlace
     #   Creates a new instance of {FieldOptions} with the given options.
     #   @param options [Hash, #[]] a hash containing the given field options.
     #   @option options [Symbol] :mode the {#mode} in which fields should be rendered.
-    #   @option options :view the {#view} context to use when rendering the field.
+    #   @option options [Array] :middlewares the {#middlewares} for the field.
     # @overload initialize
     #   Creates a new instance of {FieldOptions} with the default options.
     def initialize(options = {})
       self.mode = options[:mode]
-      self.view = options[:view]
       self.middlewares = options[:middlewares] || []
     end
 
@@ -50,7 +44,6 @@ module EditInPlace
     def dup
       f = self.class.new
       f.mode = mode
-      f.view = view
       f.middlewares = middlewares.map { |m| m.instance_of?(Class) ? m : m.dup }
       f
     end
@@ -65,7 +58,6 @@ module EditInPlace
       other = other.dup
 
       self.mode = other.mode unless other.mode.nil?
-      self.view = other.view unless other.view.nil?
       self.middlewares += other.middlewares
     end
 

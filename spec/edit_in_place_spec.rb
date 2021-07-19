@@ -27,9 +27,9 @@ RSpec.describe EditInPlace do
 
     it 'changes the configuration' do
       described_class.configure do |c|
-        c.field_options.view = 'random view'
+        c.field_options.middlewares = [:random]
       end
-      expect(described_class.config.field_options.view).to eq 'random view'
+      expect(described_class.config.field_options.middlewares).to eq [:random]
     end
   end
 end
