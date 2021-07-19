@@ -108,10 +108,7 @@ module EditInPlace
       options = config.field_options.merge(get_field_options!(args))
       args.unshift(options.mode)
 
-      stack = MiddlewareStack.new(config.defined_middlewares,
-                                  options.middlewares,
-                                  config.registered_middlewares)
-      args = stack.call(*args)
+      args = apply_middlewares(options.middlewares, *args)
 
       type = evaluate_field_type(type)
       type.render(*args)
@@ -215,6 +212,19 @@ module EditInPlace
       raise UnregisteredFieldTypeError, name if result.nil?
 
       result
+    end
+
+    # Applies the given array of middlewares to the given input arguments and returns the result.
+    # @param middlewares [Array] the array of middlewares to apply.
+    # @param args [Array] the array of input arguments.
+    # @return [Array] the resulting argument list.
+    def apply_middlewares(middlewares, *args)
+      definition = Middlegem::ArrayDefinition.new(config.defined_middlewares)
+      parser = MiddlewareParser.new(config.registered_middlewares)
+      middlewares = parser.parse(middlewares)
+      stack = Middlegem::Stack.new(definition, middlewares: middlewares)
+
+      stack.call(*args)
     end
   end
 end
