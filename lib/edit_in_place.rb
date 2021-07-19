@@ -28,7 +28,7 @@ require 'edit_in_place/unsupported_mode_error'
 module EditInPlace
   @config = Configuration.new
 
-  # Gets the `Configuration` instance that represents the global configuration for the
+  # Gets the {Configuration} instance that contains the global configuration for the
   # edit_in_place plugin. The global configuration will be applied to all created {Builder}
   # instances.
   # @return [Configuration] the global configuration.
@@ -37,7 +37,7 @@ module EditInPlace
     @config
   end
 
-  # Sets the `Configuration` instance that represents the global configuration for the
+  # Sets the {Configuration} instance that represents the global configuration for the
   # edit_in_place plugin. A convenient use for this method is to reset the global configuration
   # by setting it to +EditInPlace::Configuration.new+.
   # @param config [Configuration] the global configuration.

@@ -3,7 +3,7 @@
 module EditInPlace
   # {FieldType} is a class that represents a single type of field. A field is a single,
   # self-contained component that displays data in various "modes", typically either "viewing" or
-  # "editing". Field types provide the templates for similar fields.
+  # "editing". Field types provide the templates for rendering fields.
   #
   # @abstract
   # @author Jacob Lockard

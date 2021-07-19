@@ -2,19 +2,17 @@
 
 require 'active_support/core_ext/object/deep_dup'
 
-# frozen_string_literal: true
-
 module EditInPlace
   # {Configuration} is a class that is capable of storing configuration for an edit_in_place
-  # {Builder}. Essentially all the options provided by edit_in_place reside in this class for
+  # {Builder}. Essentially all the options provided by edit_in_place reside in this class, for
   # easy reuse. This class is currently used in two locations---the global configuration in
   # {EditInPlace.config} and the builder-specific configuration in {Builder#config}.
   #
   # @author Jacob Lockard
   # @since 0.1.0
   class Configuration
-    # The default mode in which fields should be rendered if left unpspecified in the
-    # configuration.
+    # The default mode in which fields should be rendered if left unspecified in
+    # {#field_options}.
     DEFAULT_MODE = :viewing
 
     # The {FieldTypeRegistrar} used to store the list of registered field types.

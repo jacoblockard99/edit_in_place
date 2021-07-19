@@ -3,7 +3,7 @@
 module EditInPlace
   # {Registrar} is a class that is capable of storing a list of objects registered with symbol
   # names. Note that it makes no attempt to validate the objects registered. If such validation
-  # is required feel free to subclass {Registrar} and override the {validate_registration!}
+  # is required feel free to subclass {Registrar} and override the {#validate_registration!}
   # method.
   #
   # @author Jacob Lockard
@@ -59,17 +59,15 @@ module EditInPlace
     # internal one and can be safely modified.
     # @return [Hash<(Symbol, Object)>] the hash of registered names and objects.
     def all
+      # Be sure to not duplicate classes.
       registrations.transform_values { |r| r.instance_of?(Class) ? r : r.deep_dup }
     end
 
     protected
 
-    # @return [Hash<(Symbol, Object)>] A hash of registrations.
-    attr_reader :registrations
-
     # Should ensure that the given registration is valid. By default a registration is valid if
-    # its name is not already taken and is a symbol. Subclasses may override this method to add
-    # validation rules. Errors should be raised for any invalid registrations.
+    # its name is not already taken and it is a symbol. Subclasses may override this method to
+    # add validation rules. Errors should be raised for any invalid registrations.
     # @param name [Symbol] the name to validate.
     # @param _object [Object] the object to validate.
     # @return [void]
@@ -86,5 +84,11 @@ module EditInPlace
         ERR
       end
     end
+
+    private
+
+    # The hash of registrations contained in this {Registrar}.
+    # @return [Hash<(Symbol, Object)>] the hash of registrations.
+    attr_reader :registrations
   end
 end

@@ -9,7 +9,7 @@ module EditInPlace
   #   2. a symbol name corresponding to a registered middleware, or
   #   3. a parameterless middleware class that should be instantiated.
   # {MiddlewareWrapper}, which is itself a +Middlegem::Middleware+ does all the necessary
-  # conversion.
+  # conversions, providing a simple {#call} method.
   #
   # @author Jacob Lockard
   # @since 0.2.0
@@ -32,7 +32,8 @@ module EditInPlace
       super()
     end
 
-    # Executes the middleware by delegating appropriately to the base middleware.
+    # Executes this {MiddlewareWrapper} with the given input by delegating appropriately to the
+    # base middleware.
     # @param args [Array] the input arguments.
     # @return [Array] the transformed output.
     def call(*args)
@@ -41,8 +42,8 @@ module EditInPlace
 
     private
 
-    # Attempts to find a middleware registered with the given name in the middleare registrar. If
-    # one could not be found, raises an appropriate error.
+    # Attempts to find a middleware registered with the given name in the middleware registrar.
+    # If one could not be found, raises an appropriate error.
     # @param name [Symbol] the name to search for.
     # @return the found middleware.
     def lookup_middleware(name, registrar)

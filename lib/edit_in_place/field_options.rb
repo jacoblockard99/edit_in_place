@@ -2,6 +2,8 @@
 
 module EditInPlace
   # {FieldOptions} is a class that stores the options and context required to render a field.
+  # More specifically, it stores options given to *the {Builder#field} method itself*, not
+  # options given to the field renderer.
   #
   # @author Jacob Lockard
   # @since 0.1.0
@@ -48,10 +50,10 @@ module EditInPlace
       f
     end
 
-    # Merges the given {FieldOptions} instance into this one. Modes and view contexts from the
-    # other instance will overwrite those in this instance if present. The other instance is
-    # duplicated before being merged, so it can be safely modified after the fact. All
-    # middleware arrays will be merged.
+    # Merges the given {FieldOptions} instance into this one. A mode from the
+    # other instance will overwrite the one in this instance if present. Middleware arrays will
+    # be merged. Note that the other instance is duplicated before being merged, so it can be
+    # safely modified after the fact.
     # @param other [FieldOptions] the other field options to merge into this one.
     # @return [void]
     def merge!(other)

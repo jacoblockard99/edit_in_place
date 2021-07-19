@@ -35,8 +35,10 @@ module EditInPlace
       @base = base
     end
 
-    # Overrides +method_missing+ to allow the use of methods defined on the base builder.
-    # @param method_name [String] the name of the missing method.
+    # Overrides +method_missing+ to allow the use of methods defined on the base builder. This
+    # method was added in version 0.2.0 when Rails support (and thus support for
+    # +delegate_missing_to+) was removed.
+    # @param method_name [Symbol, String] the name of the missing method.
     # @param args [Array] the arguments given to the missing method.
     # @yield the block passed to the missing method.
     # @return the result of calling the method on the base builder, if it was defined, or the
@@ -46,8 +48,10 @@ module EditInPlace
       base.respond_to?(method_name) ? base.send(method_name, *args, &block) : super
     end
 
-    # Overrides +respond_to_missing?+ to respond to methods defined on the base builder.
-    # @param method_name [String] the name of the missing method.
+    # Overrides +respond_to_missing?+ to respond to methods defined on the base builder. This
+    # method was added in version 0.2.0 when Rails support (and thus support for
+    # +delegate_missing_to+) was removed.
+    # @param method_name [Symbol, String] the name of the missing method.
     # @return [Boolean] whether this {ExtendedBuilder} can respond to the given method name.
     # @since 0.2.0
     def respond_to_missing?(method_name, priv = false)

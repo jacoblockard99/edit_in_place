@@ -115,25 +115,14 @@ module EditInPlace
     end
 
     # Yields a new, scoped {Builder} with the given field options. This method is helpful when
-    # many fields require the same options. One use, for example, is to easily give field types
-    # access to the current view context, like so:
-    #
-    #   <!-- some_view.html.erb -->
-    #
-    #   <%= @builder.scoped view: self do |b|
-    #     <%= b.field(:example_type, 'random scoped field') %>
-    #     <!-- ... -->
-    #   <% end %>
-    #
-    # Now all fields generated using +b+ will have access to +self+ as the view context in
-    # {FieldOptions#view}.
+    # many fields require the same options.
     # @yieldparam scoped_builder [Builder] the new, scoped {Builder} instance.
-    # @yieldreturn [string] the output generated with the scoped builder.
+    # @yieldreturn the output.
     # @param field_options [FieldOptions, Hash] the field options that the scoped builder should
     #   have. Note that these options will be merged (using {FieldOptions#merge!}) with the
     #   current ones. Either an actual {FieldOptions} instance or a hash of options are
     #   acceptable.
-    # @return [string] the output of the block.
+    # @return the output of the block.
     def scoped(field_options = {})
       field_options = FieldOptions.new(field_options) unless field_options.is_a? FieldOptions
 
@@ -149,9 +138,10 @@ module EditInPlace
     # Note that this method is for convenience only and is exactly equivalent to calling
     # +scoped(middlewares: ...)+.
     # @yieldparam scoped_builder [Builder] the new, scoped {Builder} instance.
-    # @yieldreturn [string] the output.
+    # @yieldreturn the output.
     # @param middlewares [Array] the array of middlewares that the scoped builder should have
     #   merged into it.
+    # @return the output of the block.
     # @since 0.2.0
     def with_middlewares(*middlewares, &block)
       scoped(middlewares: middlewares, &block)
@@ -162,7 +152,7 @@ module EditInPlace
 
     # Attempts to get a field type from the given '*_field' method name.
     # @param method_name [Symbol, String] the name of the method to parse.
-    # @return [FieldType, nil] The field type if one could be found; +nil+ if not.
+    # @return [FieldType, nil] the field type if one could be found; +nil+ if not.
     def parse_field_method(method_name)
       method_name = method_name.to_s
       return nil unless method_name.end_with? '_field'
@@ -171,10 +161,11 @@ module EditInPlace
       config.field_types.find(field_type_name)
     end
 
-    # Gets an appropriate `FieldOptions` instance for the given list of field arguments and
+    # Gets an appropriate {FieldOptions} instance for the given list of field arguments and
     # removes any present field options from the argument list.
     # @param args [Array] the raw arguments from which to get the field options.
-    # @return [void]
+    # @return [FieldOptions] the retrieved field options.
+    # @since 0.2.0
     def get_field_options!(args)
       case args.first
       when FieldOptions
@@ -188,16 +179,18 @@ module EditInPlace
 
     # Gets an appropriate {FieldType} instance for the given raw field type argument. In
     # particular:
-    # - When the input is already a FieldType instance, that instance is simply returned.
     # - When the input is a symbol, attempts to find a registered field type associated with it.
+    # - When the input is a class, instatiates it.
+    # - When the input is already a FieldType instance, that instance is simply returned.
     # - Otherwise, raises an error.
+    # @param type [Symbol, Class, FieldType] the raw field type argument to evaluate.
     # @return [FieldType] an appropriate {FieldType} instance for the given input.
     def evaluate_field_type(type)
       case type
       when Symbol
         evaluate_field_type(lookup_field_type(type))
       when Class
-        type.new
+        evaluate_field_type(type.new)
       when FieldType
         type
       else
@@ -232,7 +225,7 @@ module EditInPlace
     # Converts each of the given middleware instances into a {MiddlewareWrapper} and returns the
     # result.
     # @param middlewares [Array] the middlewares to wrap.
-    # @return [Array] the wrapped middlewares
+    # @return [Array] the wrapped middlewares.
     # @since 0.2.0
     def wrap_middlewares(middlewares)
       middlewares.map { |m| MiddlewareWrapper.new(m, config.registered_middlewares) }
