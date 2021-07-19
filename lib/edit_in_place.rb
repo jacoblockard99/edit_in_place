@@ -8,6 +8,7 @@ require 'edit_in_place/field_type'
 require 'edit_in_place/field_type_registrar'
 require 'edit_in_place/middleware_parser'
 require 'edit_in_place/middleware_registrar'
+require 'edit_in_place/middleware_wrapper'
 require 'edit_in_place/registrar'
 require 'edit_in_place/version'
 
