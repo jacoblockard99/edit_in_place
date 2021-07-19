@@ -160,6 +160,9 @@ module EditInPlace
 
     private
 
+    # Attempts to get a field type from the given '*_field' method name.
+    # @param method_name [Symbol, String] the name of the method to parse.
+    # @return [FieldType, nil] The field type if one could be found; +nil+ if not.
     def parse_field_method(method_name)
       method_name = method_name.to_s
       return nil unless method_name.end_with? '_field'
