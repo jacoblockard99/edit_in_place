@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
+require 'edit_in_place/array_definition'
 require 'edit_in_place/builder'
 require 'edit_in_place/configuration'
 require 'edit_in_place/extended_builder'
 require 'edit_in_place/field_options'
 require 'edit_in_place/field_type'
 require 'edit_in_place/field_type_registrar'
-require 'edit_in_place/middleware_parser'
 require 'edit_in_place/middleware_registrar'
+require 'edit_in_place/middleware_wrapper'
 require 'edit_in_place/registrar'
 require 'edit_in_place/version'
 
