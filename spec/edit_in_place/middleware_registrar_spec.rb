@@ -21,6 +21,10 @@ RSpec.describe EditInPlace::MiddlewareRegistrar do
         expect { register }.to raise_error Middlegem::InvalidMiddlewareError
       end
 
+      it 'properly represents the invalid object' do
+        expect { register }.to raise_error(/"random bad object"/)
+      end
+
       it 'does not register the name' do
         ignore { register }
         expect(registrar.find(:capitalize)).to be_nil

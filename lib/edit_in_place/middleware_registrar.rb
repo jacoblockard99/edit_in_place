@@ -15,7 +15,9 @@ module EditInPlace
     def validate_registration!(name, middleware)
       super
       unless Middlegem::Middleware.valid?(middleware) || middleware.instance_of?(Class)
-        raise Middlegem::InvalidMiddlewareError
+        raise Middlegem::InvalidMiddlewareError, <<~ERR
+          The middleware #{middleware.inspect} is not a valid middleware!
+        ERR
       end
     end
   end

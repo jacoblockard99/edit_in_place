@@ -40,6 +40,13 @@ module EditInPlace
       base.call(*args)
     end
 
+    # Overrides +to_s+ to use the base middleware's string representation. This ensures that
+    # error messages are displayed properly.
+    # @return [String] the string representation of the base middleware.
+    def to_s
+      base.to_s
+    end
+
     private
 
     # Attempts to find a middleware registered with the given name in the middleware registrar.

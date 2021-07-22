@@ -203,6 +203,27 @@ RSpec.describe EditInPlace::Builder do
         expect(actual).to eq 'Init: Test!, After: ARG*ONE*!TWO!$THREE$'
       end
     end
+
+    context 'with an unpermitted middleware' do
+      before do
+        EditInPlace.configure do |c|
+          c.defined_middlewares = []
+          c.field_options.middlewares << MiddlewareOne
+        end
+      end
+
+      def render
+        builder.field(TestFieldType.new('Test'), 'Arg')
+      end
+
+      it 'raises an appropriate error' do
+        expect { render }.to raise_error Middlegem::UnpermittedMiddlewareError
+      end
+
+      it 'properly represents the failed middleware' do
+        expect { render }.to raise_error(/#<MiddlewareOne:/)
+      end
+    end
   end
 
   describe '*_field' do
